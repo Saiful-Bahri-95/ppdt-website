@@ -1,8 +1,6 @@
 import type { Metadata } from "next"
 import { Poppins, DM_Sans } from "next/font/google"
 import "./globals.css"
-import { Header } from "@/components/layout/header"
-import { Footer } from "@/components/layout/footer"
 import { Toaster } from "@/components/ui/sonner"
 
 const poppins = Poppins({
@@ -44,9 +42,7 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${poppins.variable} ${dmSans.variable}`}>
       <body className="min-h-screen flex flex-col antialiased">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        {children}
         <Toaster richColors position="top-right" />
       </body>
     </html>

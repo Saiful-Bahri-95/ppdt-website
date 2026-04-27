@@ -28,14 +28,23 @@ export async function updateSession(request: NextRequest) {
   // PENTING: refresh session
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Proteksi route /admin - kecuali halaman login
+  const path = request.nextUrl.pathname
+
+  // Proteksi route /admin (kecuali halaman login)
   if (
     !user &&
-    request.nextUrl.pathname.startsWith('/admin') &&
-    !request.nextUrl.pathname.startsWith('/admin/login')
+    path.startsWith('/admin') &&
+    !path.startsWith('/admin/login')
   ) {
     const url = request.nextUrl.clone()
     url.pathname = '/admin/login'
+    return NextResponse.redirect(url)
+  }
+
+  // Kalau sudah login dan akses /admin/login, redirect ke dashboard
+  if (user && path === '/admin/login') {
+    const url = request.nextUrl.clone()
+    url.pathname = '/admin'
     return NextResponse.redirect(url)
   }
 
