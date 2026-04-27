@@ -2,7 +2,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { MapPin, Mail } from 'lucide-react'
 
-// Icon brand sebagai komponen SVG (tidak tergantung lucide-react)
 function InstagramIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -31,64 +30,79 @@ export function Footer() {
   const tahunIni = new Date().getFullYear()
 
   return (
-    <footer className="bg-gradient-to-br from-red-700 to-red-800 text-white mt-20">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="relative w-14 h-14 bg-white rounded-full p-1">
-                <Image src="/logo-ppdt.png" alt="Logo PPDT" fill className="object-contain p-1" />
-              </div>
-              <div>
-                <h3 className="font-bold text-lg">PPDT</h3>
-                <p className="text-xs text-red-100">Persatuan Pemuda Dukuh Tengah</p>
-              </div>
-            </div>
-            <p className="text-sm text-red-100 leading-relaxed">
-              Wadah pemersatu pemuda Dukuh Tengah dalam membangun lingkungan yang guyub, kreatif, dan berdaya.
-            </p>
-          </div>
+    <footer className="relative mt-20 overflow-hidden">
+      {/* Wave SVG separator */}
+      <div className="absolute top-0 left-0 right-0 -translate-y-px">
+        <svg className="w-full h-12 fill-orange-50" preserveAspectRatio="none" viewBox="0 0 1440 48">
+          <path d="M0,48 C240,0 480,0 720,24 C960,48 1200,48 1440,0 L1440,48 L0,48 Z" />
+        </svg>
+      </div>
 
-          <div>
-            <h4 className="font-semibold mb-4 text-base">Navigasi</h4>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/" className="text-red-100 hover:text-white transition">Beranda</Link></li>
-              <li><Link href="/tentang" className="text-red-100 hover:text-white transition">Tentang Kami</Link></li>
-              <li><Link href="/kegiatan" className="text-red-100 hover:text-white transition">Kegiatan</Link></li>
-              <li><Link href="/galeri" className="text-red-100 hover:text-white transition">Galeri</Link></li>
-              <li><Link href="/keuangan" className="text-red-100 hover:text-white transition">Laporan Keuangan</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-semibold mb-4 text-base">Kontak</h4>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-start gap-2">
-                <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0 text-red-200" />
-                <span className="text-red-100">Dukuh Tengah, Indonesia</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Mail className="h-4 w-4 flex-shrink-0 text-red-200" />
-                <a href="mailto:ppdt.dukuhtengah@gmail.com" className="text-red-100 hover:text-white transition">ppdt.dukuhtengah@gmail.com</a>
-              </li>
-            </ul>
-
-            <div className="flex gap-3 mt-5">
-              <a href="#" aria-label="Instagram" className="w-9 h-9 rounded-full bg-red-600/50 hover:bg-red-600 flex items-center justify-center transition">
-                <InstagramIcon className="h-4 w-4" />
-              </a>
-              <a href="#" aria-label="Facebook" className="w-9 h-9 rounded-full bg-red-600/50 hover:bg-red-600 flex items-center justify-center transition">
-                <FacebookIcon className="h-4 w-4" />
-              </a>
-              <a href="#" aria-label="WhatsApp" className="w-9 h-9 rounded-full bg-red-600/50 hover:bg-red-600 flex items-center justify-center transition">
-                <WhatsAppIcon className="h-4 w-4" />
-              </a>
-            </div>
-          </div>
+      <div className="bg-gradient-to-br from-red-700 via-red-600 to-orange-600 text-white relative">
+        {/* Decorative blobs */}
+        <div className="absolute inset-0 opacity-20 overflow-hidden">
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-orange-400 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-yellow-400 rounded-full blur-3xl animate-pulse" />
         </div>
 
-        <div className="border-t border-red-600/40 mt-10 pt-6 text-center text-sm text-red-100">
-          <p>&copy; {tahunIni} Persatuan Pemuda Dukuh Tengah. Semua hak dilindungi.</p>
+        <div className="container mx-auto px-4 py-16 relative">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="relative w-14 h-14 bg-white rounded-2xl p-1 shadow-lg shadow-orange-900/20">
+                  <Image src="/logo-ppdt.png" alt="Logo PPDT" fill className="object-contain p-1" />
+                </div>
+                <div>
+                  <h3 className="font-display font-bold text-xl">PPDT</h3>
+                  <p className="text-xs text-orange-100">Persatuan Pemuda Dukuh Tengah</p>
+                </div>
+              </div>
+              <p className="text-sm text-orange-100 leading-relaxed">
+                Wadah pemersatu pemuda Dukuh Tengah dalam membangun lingkungan yang guyub, kreatif, dan berdaya.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-display font-semibold mb-4 text-base">Navigasi</h4>
+              <ul className="space-y-2.5 text-sm">
+                <li><Link href="/" className="text-orange-100 hover:text-white transition hover:translate-x-1 inline-block">Beranda</Link></li>
+                <li><Link href="/tentang" className="text-orange-100 hover:text-white transition hover:translate-x-1 inline-block">Tentang Kami</Link></li>
+                <li><Link href="/kegiatan" className="text-orange-100 hover:text-white transition hover:translate-x-1 inline-block">Kegiatan</Link></li>
+                <li><Link href="/galeri" className="text-orange-100 hover:text-white transition hover:translate-x-1 inline-block">Galeri</Link></li>
+                <li><Link href="/keuangan" className="text-orange-100 hover:text-white transition hover:translate-x-1 inline-block">Laporan Keuangan</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-display font-semibold mb-4 text-base">Kontak</h4>
+              <ul className="space-y-3 text-sm">
+                <li className="flex items-start gap-2">
+                  <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0 text-orange-200" />
+                  <span className="text-orange-100">Dukuh Tengah, Indonesia</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Mail className="h-4 w-4 flex-shrink-0 text-orange-200" />
+                  <a href="mailto:ppdt.dukuhtengah@gmail.com" className="text-orange-100 hover:text-white transition">ppdt.dukuhtengah@gmail.com</a>
+                </li>
+              </ul>
+
+              <div className="flex gap-3 mt-5">
+                <a href="#" aria-label="Instagram" className="w-10 h-10 rounded-xl bg-white/10 hover:bg-white hover:text-orange-600 backdrop-blur-sm flex items-center justify-center transition-all hover:scale-110 hover:-translate-y-1">
+                  <InstagramIcon className="h-4 w-4" />
+                </a>
+                <a href="#" aria-label="Facebook" className="w-10 h-10 rounded-xl bg-white/10 hover:bg-white hover:text-orange-600 backdrop-blur-sm flex items-center justify-center transition-all hover:scale-110 hover:-translate-y-1">
+                  <FacebookIcon className="h-4 w-4" />
+                </a>
+                <a href="#" aria-label="WhatsApp" className="w-10 h-10 rounded-xl bg-white/10 hover:bg-white hover:text-orange-600 backdrop-blur-sm flex items-center justify-center transition-all hover:scale-110 hover:-translate-y-1">
+                  <WhatsAppIcon className="h-4 w-4" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-white/20 mt-12 pt-6 text-center text-sm text-orange-100">
+            <p>&copy; {tahunIni} <span className="font-semibold">Persatuan Pemuda Dukuh Tengah</span>. Semua hak dilindungi.</p>
+          </div>
         </div>
       </div>
     </footer>
