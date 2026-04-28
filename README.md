@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Website PPDT - Persatuan Pemuda Dukuh Tengah
 
-## Getting Started
+Website resmi organisasi kepemudaan Persatuan Pemuda Dukuh Tengah (PPDT).
 
-First, run the development server:
+## 🚀 Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Bahasa**: TypeScript
+- **Styling**: Tailwind CSS v4 + shadcn/ui
+- **Backend**: Supabase (PostgreSQL + Auth + Storage)
+- **Deployment**: Vercel
+
+## 📋 Fitur
+
+### Halaman Publik
+- Beranda dengan hero section dan statistik
+- Profil organisasi (Tentang)
+- Informasi bulanan & pengumuman
+- Galeri kegiatan
+- Daftar pemenang arisan
+- Laporan keuangan transparan
+
+### Panel Admin
+- Login & autentikasi aman
+- Dashboard statistik
+- CRUD Kegiatan (dengan upload foto)
+- CRUD Galeri (multi-upload)
+- CRUD Informasi Bulanan
+- CRUD Peserta Arisan
+- CRUD Transaksi Keuangan
+- User Management (super admin)
+- Pengaturan Organisasi
+
+## 🛠️ Setup Development
 
 ```bash
+# Install dependencies
+npm install
+
+# Setup environment
+cp .env.example .env.local
+# Isi credentials Supabase di .env.local
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📜 License
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+© 2026 Persatuan Pemuda Dukuh Tengah. All rights reserved.
