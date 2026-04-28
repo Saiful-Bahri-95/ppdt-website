@@ -28,7 +28,7 @@ export default async function LoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="relative w-20 h-20 mx-auto mb-4 animate-float">
-            <Image src="/logo-ppdt.png" alt="Logo PPDT" fill className="object-contain drop-shadow-xl" priority />
+            <Image src="/logo-ppdt.png" alt="Logo PPDT" fill sizes="80px" className="object-contain drop-shadow-xl" priority />
           </div>
           <h1 className="text-2xl md:text-3xl font-display font-extrabold text-stone-900 mb-2">
             Panel <span className="text-gradient-sunset">Admin</span>

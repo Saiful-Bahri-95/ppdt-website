@@ -89,7 +89,7 @@ export function AdminShell({
         <div className="h-16 px-6 flex items-center justify-between border-b border-stone-200">
           <Link href="/admin" className="flex items-center gap-2.5">
             <div className="relative w-8 h-8 flex-shrink-0">
-              <Image src="/logo-ppdt.png" alt="PPDT" fill className="object-contain" />
+              <Image src="/logo-ppdt.png" alt="PPDT" fill sizes="32px" className="object-contain" />
             </div>
             <div>
               <p className="font-display font-extrabold text-sm leading-none text-gradient-sunset">PPDT</p>

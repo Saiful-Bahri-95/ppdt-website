@@ -50,7 +50,7 @@ export function Footer() {
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <div className="relative w-14 h-14 bg-white rounded-2xl p-1 shadow-lg shadow-orange-900/20">
-                  <Image src="/logo-ppdt.png" alt="Logo PPDT" fill className="object-contain p-1" />
+                  <Image src="/logo-ppdt.png" alt="Logo PPDT" fill sizes="56px" className="object-contain p-1" />
                 </div>
                 <div>
                   <h3 className="font-display font-bold text-xl">PPDT</h3>

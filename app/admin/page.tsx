@@ -3,23 +3,33 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Calendar, Image as ImageIcon, Megaphone, Trophy, Wallet, ArrowRight, TrendingUp, TrendingDown } from 'lucide-react'
 import { requireAdmin } from '@/lib/auth'
-import { dummyKegiatan, dummyGaleri, dummyInformasi, dummyArisan, dummyKeuangan, hitungSaldoTotal } from '@/lib/dummy-data'
+import { createClient } from '@/lib/supabase/server'
 import { formatRupiah } from '@/lib/format'
 
-export const metadata = {
-  title: 'Dashboard Admin',
-}
+export const metadata = { title: 'Dashboard Admin' }
 
 export default async function AdminDashboardPage() {
   const profile = await requireAdmin()
+  const supabase = await createClient()
 
-  const totalKegiatan = dummyKegiatan.length
-  const totalFoto = dummyGaleri.length
-  const totalInformasi = dummyInformasi.length
-  const totalArisan = dummyArisan.length
-  const saldoTotal = hitungSaldoTotal(dummyKeuangan)
-  const totalPemasukan = dummyKeuangan.filter(t => t.jenis === 'pemasukan').reduce((acc, t) => acc + t.nominal, 0)
-  const totalPengeluaran = dummyKeuangan.filter(t => t.jenis === 'pengeluaran').reduce((acc, t) => acc + t.nominal, 0)
+  // Parallel fetch counts
+  const [kegiatanCount, fotoCount, infoCount, arisanCount, transaksiData] = await Promise.all([
+    supabase.from('kegiatan').select('*', { count: 'exact', head: true }),
+    supabase.from('galeri_foto').select('*', { count: 'exact', head: true }),
+    supabase.from('informasi_bulanan').select('*', { count: 'exact', head: true }),
+    supabase.from('peserta_arisan').select('*', { count: 'exact', head: true }),
+    supabase.from('transaksi_keuangan').select('jenis, nominal'),
+  ])
+
+  const totalKegiatan = kegiatanCount.count || 0
+  const totalFoto = fotoCount.count || 0
+  const totalInformasi = infoCount.count || 0
+  const totalArisan = arisanCount.count || 0
+
+  const transaksi = transaksiData.data || []
+  const totalPemasukan = transaksi.filter(t => t.jenis === 'pemasukan').reduce((acc, t) => acc + t.nominal, 0)
+  const totalPengeluaran = transaksi.filter(t => t.jenis === 'pengeluaran').reduce((acc, t) => acc + t.nominal, 0)
+  const saldoTotal = totalPemasukan - totalPengeluaran
 
   const quickStats = [
     { label: 'Total Kegiatan', value: totalKegiatan, icon: Calendar, color: 'from-red-500 to-orange-500', href: '/admin/kegiatan' },
@@ -38,7 +48,6 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      {/* Welcome */}
       <div>
         <h1 className="text-2xl md:text-3xl font-display font-extrabold text-stone-900">
           Halo, <span className="text-gradient-sunset">{profile.nama_lengkap.split(' ')[0]}</span>! 👋
@@ -48,7 +57,6 @@ export default async function AdminDashboardPage() {
         </p>
       </div>
 
-      {/* Saldo Card */}
       <Card className="border-0 bg-gradient-to-br from-red-600 via-orange-500 to-amber-500 text-white shadow-2xl shadow-orange-500/30 overflow-hidden">
         <CardContent className="p-6 md:p-8 relative">
           <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-300 rounded-full blur-3xl opacity-20" />
@@ -57,9 +65,7 @@ export default async function AdminDashboardPage() {
               <Wallet className="h-5 w-5" />
               <span className="text-sm font-semibold uppercase tracking-wider text-orange-100">Saldo Kas Terkini</span>
             </div>
-            <p className="text-3xl md:text-5xl font-display font-extrabold leading-none mb-4">
-              {formatRupiah(saldoTotal)}
-            </p>
+            <p className="text-3xl md:text-5xl font-display font-extrabold leading-none mb-4">{formatRupiah(saldoTotal)}</p>
             <div className="flex flex-wrap gap-4 text-sm">
               <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-3 py-1">
                 <TrendingUp className="h-3.5 w-3.5" />
@@ -74,7 +80,6 @@ export default async function AdminDashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Quick Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {quickStats.map((stat) => {
           const Icon = stat.icon
@@ -94,13 +99,10 @@ export default async function AdminDashboardPage() {
         })}
       </div>
 
-      {/* Quick Actions */}
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg md:text-xl font-display font-bold text-stone-900">⚡ Aksi Cepat</h2>
-          <Badge className="bg-orange-100 text-orange-700 hover:bg-orange-100 border-0">
-            Tambah konten baru
-          </Badge>
+          <Badge className="bg-orange-100 text-orange-700 hover:bg-orange-100 border-0">Tambah konten baru</Badge>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {quickActions.map((action) => {
@@ -122,7 +124,6 @@ export default async function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* Tips Card */}
       <Card className="border-0 bg-gradient-to-br from-orange-50 to-amber-50 overflow-hidden">
         <CardContent className="p-6 relative">
           <div className="text-3xl mb-2">💡</div>

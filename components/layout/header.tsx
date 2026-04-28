@@ -41,7 +41,7 @@ export function Header() {
           {/* Logo & Brand */}
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative w-10 h-10 md:w-12 md:h-12 flex-shrink-0 transition-transform group-hover:scale-110 group-hover:rotate-3 duration-300">
-              <Image src="/logo-ppdt.png" alt="Logo PPDT" fill className="object-contain" priority />
+              <Image src="/logo-ppdt.png" alt="Logo PPDT" fill sizes="48px" className="object-contain" priority />
             </div>
             <div className="flex flex-col leading-tight">
               <span className="font-display font-extrabold text-lg md:text-xl text-gradient-sunset">

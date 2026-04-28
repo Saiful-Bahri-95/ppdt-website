@@ -3,17 +3,24 @@ import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Calendar, MapPin, Sparkles, ArrowRight } from 'lucide-react'
-import { dummyKegiatan } from '@/lib/dummy-data'
+import { createClient } from '@/lib/supabase/server'
 import { formatTanggal, truncate } from '@/lib/format'
+import type { Kegiatan } from '@/lib/types/database'
 
-export default function KegiatanPage() {
-  const kegiatan = [...dummyKegiatan]
-    .filter((k) => k.status === 'published')
-    .sort((a, b) => new Date(b.tanggal_kegiatan).getTime() - new Date(a.tanggal_kegiatan).getTime())
+export const metadata = { title: 'Kegiatan' }
+
+export default async function KegiatanPage() {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('kegiatan')
+    .select('*')
+    .eq('status', 'published')
+    .order('tanggal_kegiatan', { ascending: false })
+
+  const kegiatan = (data || []) as Kegiatan[]
 
   return (
     <>
-      {/* HERO */}
       <section className="relative bg-mesh-sunset py-16 md:py-20 -mt-16 md:-mt-20 pt-28 md:pt-32 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-10 left-10 w-72 h-72 bg-red-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob" />
@@ -38,7 +45,6 @@ export default function KegiatanPage() {
         </div>
       </section>
 
-      {/* LIST KEGIATAN */}
       <section className="container mx-auto px-4 py-12 md:py-16">
         {kegiatan.length === 0 ? (
           <Card className="border-0 bg-white max-w-md mx-auto">
@@ -58,8 +64,8 @@ export default function KegiatanPage() {
                         src={k.foto_header_url}
                         alt={k.judul}
                         fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-700"
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover group-hover:scale-110 transition-transform duration-700"
                       />
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />

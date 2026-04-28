@@ -40,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="id" className={`${poppins.variable} ${dmSans.variable}`}>
+    <html lang="id" data-scroll-behavior="smooth" className={`${poppins.variable} ${dmSans.variable}`}>
       <body className="min-h-screen flex flex-col antialiased">
         {children}
         <Toaster richColors position="top-right" />

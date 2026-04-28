@@ -1,18 +1,26 @@
 import Image from 'next/image'
-import { Badge } from '@/components/ui/badge'
 import { Sparkles, ImageIcon } from 'lucide-react'
-import { dummyGaleri, dummyKegiatan } from '@/lib/dummy-data'
+import { createClient } from '@/lib/supabase/server'
 
-export default function GaleriPage() {
-  // Gabungkan info kegiatan ke setiap foto
-  const galeriDenganKegiatan = dummyGaleri.map((foto) => {
-    const kegiatan = dummyKegiatan.find((k) => k.id === foto.kegiatan_id)
-    return { ...foto, namaKegiatan: kegiatan?.judul || null }
-  })
+export const metadata = { title: 'Galeri' }
+
+export default async function GaleriPage() {
+  const supabase = await createClient()
+
+  const { data } = await supabase
+    .from('galeri_foto')
+    .select('id, foto_url, caption, kegiatan:kegiatan_id(judul)')
+    .order('created_at', { ascending: false })
+
+  const galeri = (data || []) as unknown as Array<{
+    id: string
+    foto_url: string
+    caption: string | null
+    kegiatan: { judul: string } | null
+  }>
 
   return (
     <>
-      {/* HERO */}
       <section className="relative bg-mesh-sunset py-16 md:py-20 -mt-16 md:-mt-20 pt-28 md:pt-32 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-10 right-20 w-72 h-72 bg-orange-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob" />
@@ -36,16 +44,15 @@ export default function GaleriPage() {
         </div>
       </section>
 
-      {/* GRID GALERI */}
       <section className="container mx-auto px-4 py-12 md:py-16">
-        {galeriDenganKegiatan.length === 0 ? (
+        {galeri.length === 0 ? (
           <div className="max-w-md mx-auto text-center py-12">
             <ImageIcon className="h-16 w-16 mx-auto text-stone-300 mb-4" />
             <p className="text-stone-500">Belum ada foto di galeri.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-            {galeriDenganKegiatan.map((foto) => (
+            {galeri.map((foto) => (
               <div
                 key={foto.id}
                 className="group relative aspect-square overflow-hidden rounded-2xl bg-stone-200 shadow-md hover:shadow-2xl hover:shadow-orange-500/20 transition-all duration-500 hover:-translate-y-1"
@@ -54,18 +61,17 @@ export default function GaleriPage() {
                   src={foto.foto_url}
                   alt={foto.caption || 'Galeri PPDT'}
                   fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-700"
                   sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  className="object-cover group-hover:scale-110 transition-transform duration-700"
                 />
 
-                {/* Hover overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end">
                   <div className="p-4 text-white">
                     {foto.caption && (
                       <p className="text-sm font-semibold mb-1 line-clamp-2">{foto.caption}</p>
                     )}
-                    {foto.namaKegiatan && (
-                      <p className="text-xs text-orange-200 line-clamp-1">{foto.namaKegiatan}</p>
+                    {foto.kegiatan && (
+                      <p className="text-xs text-orange-200 line-clamp-1">{foto.kegiatan.judul}</p>
                     )}
                   </div>
                 </div>

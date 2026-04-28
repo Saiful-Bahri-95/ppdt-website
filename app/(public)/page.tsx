@@ -4,23 +4,38 @@ import { Calendar, MapPin, ArrowRight, Trophy, Wallet, Users, Sparkles } from 'l
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { dummyKegiatan, dummyArisan, dummyKeuangan, hitungSaldoTotal } from '@/lib/dummy-data'
+import { createClient } from '@/lib/supabase/server'
 import { formatTanggal, formatRupiah, truncate } from '@/lib/format'
+import type { Kegiatan, PesertaArisan, TransaksiKeuangan } from '@/lib/types/database'
 
-export default function HomePage() {
-  const kegiatanTerbaru = dummyKegiatan
-    .filter((k) => k.status === 'published')
-    .sort((a, b) => new Date(b.tanggal_kegiatan).getTime() - new Date(a.tanggal_kegiatan).getTime())
-    .slice(0, 3)
+export default async function HomePage() {
+  const supabase = await createClient()
 
-  const pemenangTerbaru = dummyArisan[0]
-  const saldoTotal = hitungSaldoTotal(dummyKeuangan)
+  // Fetch data parallel
+  const [kegiatanRes, arisanRes, keuanganRes] = await Promise.all([
+    supabase.from('kegiatan').select('*').eq('status', 'published').order('tanggal_kegiatan', { ascending: false }).limit(3),
+    supabase.from('peserta_arisan').select('*').order('tanggal_keluar', { ascending: false }).limit(1),
+    supabase.from('transaksi_keuangan').select('*'),
+  ])
+
+  const kegiatanTerbaru = (kegiatanRes.data || []) as Kegiatan[]
+  const pemenangTerbaru = (arisanRes.data?.[0] || null) as PesertaArisan | null
+  const allKeuangan = (keuanganRes.data || []) as TransaksiKeuangan[]
+
+  // Total kegiatan (semua published)
+  const { count: totalKegiatan } = await supabase
+    .from('kegiatan')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'published')
+
+  const saldoTotal = allKeuangan.reduce((acc, t) => {
+    return t.jenis === 'pemasukan' ? acc + t.nominal : acc - t.nominal
+  }, 0)
 
   return (
     <>
       {/* HERO SECTION */}
       <section className="relative overflow-hidden bg-mesh-sunset py-20 md:py-32 -mt-16 md:-mt-20 pt-32 md:pt-40">
-        {/* Decorative animated blobs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-orange-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob" />
           <div className="absolute top-40 right-10 w-72 h-72 bg-red-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob" style={{ animationDelay: '2s' }} />
@@ -36,7 +51,7 @@ export default function HomePage() {
 
             <div className="relative w-32 h-32 md:w-40 md:h-40 mx-auto mb-8 animate-float">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-red-500 rounded-full blur-2xl opacity-40" />
-              <Image src="/logo-ppdt.png" alt="Logo PPDT" fill className="object-contain relative drop-shadow-2xl" priority />
+              <Image src="/logo-ppdt.png" alt="Logo PPDT" fill sizes="160px" className="object-contain relative drop-shadow-2xl" priority />
             </div>
 
             <h1 className="text-5xl md:text-7xl font-display font-extrabold mb-6 leading-[1.05] tracking-tight">
@@ -65,7 +80,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Wave bottom */}
         <div className="absolute bottom-0 left-0 right-0">
           <svg className="w-full h-12 md:h-20 fill-white" preserveAspectRatio="none" viewBox="0 0 1440 100">
             <path d="M0,50 C240,100 480,0 720,50 C960,100 1200,0 1440,50 L1440,100 L0,100 Z" />
@@ -85,8 +99,12 @@ export default function HomePage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs text-stone-500 mb-0.5 font-medium">Pemenang Arisan Terbaru</p>
-                  <p className="font-display font-bold text-base truncate text-stone-900">{pemenangTerbaru.nama}</p>
-                  <p className="text-xs text-stone-500">{formatTanggal(pemenangTerbaru.tanggal_keluar)}</p>
+                  <p className="font-display font-bold text-base truncate text-stone-900">
+                    {pemenangTerbaru ? pemenangTerbaru.nama : 'Belum ada'}
+                  </p>
+                  <p className="text-xs text-stone-500">
+                    {pemenangTerbaru ? formatTanggal(pemenangTerbaru.tanggal_keluar) : '-'}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -102,7 +120,7 @@ export default function HomePage() {
                 <div className="flex-1 min-w-0">
                   <p className="text-xs text-stone-500 mb-0.5 font-medium">Saldo Kas Terkini</p>
                   <p className="font-display font-bold text-base truncate text-stone-900">{formatRupiah(saldoTotal)}</p>
-                  <p className="text-xs text-stone-500">Per April 2026</p>
+                  <p className="text-xs text-stone-500">Per {new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}</p>
                 </div>
               </div>
             </CardContent>
@@ -117,8 +135,8 @@ export default function HomePage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs text-stone-500 mb-0.5 font-medium">Total Kegiatan</p>
-                  <p className="font-display font-bold text-base text-stone-900">{dummyKegiatan.length} Kegiatan</p>
-                  <p className="text-xs text-stone-500">Tahun ini</p>
+                  <p className="font-display font-bold text-base text-stone-900">{totalKegiatan || 0} Kegiatan</p>
+                  <p className="text-xs text-stone-500">Sudah dilaksanakan</p>
                 </div>
               </div>
             </CardContent>
@@ -127,80 +145,81 @@ export default function HomePage() {
       </section>
 
       {/* KEGIATAN TERBARU */}
-      <section className="container mx-auto px-4 py-20 md:py-28">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-4">
-          <div>
-            <Badge className="mb-3 bg-orange-100 text-orange-700 hover:bg-orange-100 border-0 px-3 py-1 text-xs font-semibold">
-              ✨ Kegiatan Terbaru
-            </Badge>
-            <h2 className="text-4xl md:text-5xl font-display font-extrabold text-stone-900 leading-tight">
-              Yang Sedang <span className="text-gradient-sunset">Kami Kerjakan</span>
-            </h2>
-            <p className="text-stone-600 mt-3 text-lg">Berbagai kegiatan terkini PPDT untuk masyarakat</p>
-          </div>
-          <Link href="/kegiatan">
-            <Button variant="outline" className="border-2 border-orange-300 text-orange-700 hover:bg-orange-50 rounded-full">
-              Lihat Semua
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {kegiatanTerbaru.map((kegiatan, idx) => (
-            <Link key={kegiatan.id} href={`/kegiatan/${kegiatan.slug}`} className="group">
-              <Card className="overflow-hidden h-full hover:shadow-2xl hover:shadow-orange-500/20 transition-all duration-500 group-hover:-translate-y-2 border-0 bg-white pt-0">
-                <div className="relative aspect-video w-full overflow-hidden bg-stone-100">
-                  {kegiatan.foto_header_url && (
-                    <Image
-                      src={kegiatan.foto_header_url}
-                      alt={kegiatan.judul}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <div className="absolute top-3 left-3">
-                    <Badge className="bg-white/90 backdrop-blur-sm text-orange-700 border-0 font-semibold">
-                      #{idx + 1}
-                    </Badge>
-                  </div>
-                </div>
-                <CardContent className="p-6">
-                  <h3 className="font-display font-bold text-xl mb-2 line-clamp-2 group-hover:text-orange-600 transition">
-                    {kegiatan.judul}
-                  </h3>
-                  <p className="text-sm text-stone-600 mb-4 line-clamp-2 leading-relaxed">
-                    {kegiatan.ringkasan || truncate(kegiatan.deskripsi, 120)}
-                  </p>
-                  <div className="flex items-center gap-4 text-xs text-stone-500 pt-3 border-t border-stone-100">
-                    <span className="flex items-center gap-1.5">
-                      <Calendar className="h-3.5 w-3.5 text-orange-500" />
-                      {formatTanggal(kegiatan.tanggal_kegiatan)}
-                    </span>
-                    {kegiatan.lokasi && (
-                      <span className="flex items-center gap-1.5 truncate">
-                        <MapPin className="h-3.5 w-3.5 flex-shrink-0 text-orange-500" />
-                        <span className="truncate">{kegiatan.lokasi}</span>
-                      </span>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+      {kegiatanTerbaru.length > 0 && (
+        <section className="container mx-auto px-4 py-20 md:py-28">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-4">
+            <div>
+              <Badge className="mb-3 bg-orange-100 text-orange-700 hover:bg-orange-100 border-0 px-3 py-1 text-xs font-semibold">
+                ✨ Kegiatan Terbaru
+              </Badge>
+              <h2 className="text-4xl md:text-5xl font-display font-extrabold text-stone-900 leading-tight">
+                Yang Sedang <span className="text-gradient-sunset">Kami Kerjakan</span>
+              </h2>
+              <p className="text-stone-600 mt-3 text-lg">Berbagai kegiatan terkini PPDT untuk masyarakat</p>
+            </div>
+            <Link href="/kegiatan">
+              <Button variant="outline" className="border-2 border-orange-300 text-orange-700 hover:bg-orange-50 rounded-full">
+                Lihat Semua
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
             </Link>
-          ))}
-        </div>
-      </section>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {kegiatanTerbaru.map((kegiatan, idx) => (
+              <Link key={kegiatan.id} href={`/kegiatan/${kegiatan.slug}`} className="group">
+                <Card className="overflow-hidden h-full hover:shadow-2xl hover:shadow-orange-500/20 transition-all duration-500 group-hover:-translate-y-2 border-0 bg-white pt-0">
+                  <div className="relative aspect-video w-full overflow-hidden bg-stone-100">
+                    {kegiatan.foto_header_url && (
+                      <Image
+                        src={kegiatan.foto_header_url}
+                        alt={kegiatan.judul}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <div className="absolute top-3 left-3">
+                      <Badge className="bg-white/90 backdrop-blur-sm text-orange-700 border-0 font-semibold">
+                        #{idx + 1}
+                      </Badge>
+                    </div>
+                  </div>
+                  <CardContent className="p-6">
+                    <h3 className="font-display font-bold text-xl mb-2 line-clamp-2 group-hover:text-orange-600 transition">
+                      {kegiatan.judul}
+                    </h3>
+                    <p className="text-sm text-stone-600 mb-4 line-clamp-2 leading-relaxed">
+                      {kegiatan.ringkasan || truncate(kegiatan.deskripsi, 120)}
+                    </p>
+                    <div className="flex items-center gap-4 text-xs text-stone-500 pt-3 border-t border-stone-100">
+                      <span className="flex items-center gap-1.5">
+                        <Calendar className="h-3.5 w-3.5 text-orange-500" />
+                        {formatTanggal(kegiatan.tanggal_kegiatan)}
+                      </span>
+                      {kegiatan.lokasi && (
+                        <span className="flex items-center gap-1.5 truncate">
+                          <MapPin className="h-3.5 w-3.5 flex-shrink-0 text-orange-500" />
+                          <span className="truncate">{kegiatan.lokasi}</span>
+                        </span>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* CTA SECTION */}
-      <section className="container mx-auto px-4 pb-24">
+      <section className="container mx-auto px-4 pb-24 pt-12">
         <div className="relative bg-gradient-to-br from-red-600 via-red-500 to-orange-500 rounded-[2.5rem] p-10 md:p-16 text-white text-center overflow-hidden shadow-2xl shadow-orange-500/30">
           <div className="absolute inset-0 opacity-20">
             <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-400 rounded-full blur-3xl animate-pulse" />
             <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-orange-300 rounded-full blur-3xl" />
           </div>
-
           <div className="relative">
             <Sparkles className="h-12 w-12 mx-auto mb-4 text-yellow-300" />
             <h2 className="text-3xl md:text-5xl font-display font-extrabold mb-4 leading-tight">
