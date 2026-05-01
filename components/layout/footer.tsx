@@ -31,15 +31,13 @@ export function Footer() {
 
   return (
     <footer className="relative mt-20 overflow-hidden">
-      {/* Wave SVG separator */}
       <div className="absolute top-0 left-0 right-0 -translate-y-px">
-        <svg className="w-full h-12 fill-orange-50" preserveAspectRatio="none" viewBox="0 0 1440 48">
+        <svg className="w-full h-12 fill-orange-50 dark:fill-stone-950" preserveAspectRatio="none" viewBox="0 0 1440 48">
           <path d="M0,48 C240,0 480,0 720,24 C960,48 1200,48 1440,0 L1440,48 L0,48 Z" />
         </svg>
       </div>
 
-      <div className="bg-gradient-to-br from-red-700 via-red-600 to-orange-600 text-white relative">
-        {/* Decorative blobs */}
+      <div className="bg-gradient-to-br from-red-700 via-red-600 to-orange-600 dark:from-red-900 dark:via-red-800 dark:to-orange-800 text-white relative">
         <div className="absolute inset-0 opacity-20 overflow-hidden">
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-orange-400 rounded-full blur-3xl animate-pulse" />
           <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-yellow-400 rounded-full blur-3xl animate-pulse" />
@@ -82,7 +80,7 @@ export function Footer() {
                 </li>
                 <li className="flex items-center gap-2">
                   <Mail className="h-4 w-4 flex-shrink-0 text-orange-200" />
-                  <a href="mailto:offical.ppdt@gmail.com" className="text-orange-100 hover:text-white transition">offical.ppdt@gmail.com</a>
+                  <a href="mailto:ppdt.dukuhtengah@gmail.com" className="text-orange-100 hover:text-white transition">ppdt.dukuhtengah@gmail.com</a>
                 </li>
               </ul>
 

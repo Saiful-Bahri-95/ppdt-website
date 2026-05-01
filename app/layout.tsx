@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Poppins, DM_Sans } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "@/components/ui/sonner"
+import { ThemeProvider } from "@/components/theme-provider"
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -40,10 +41,17 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="id" data-scroll-behavior="smooth" className={`${poppins.variable} ${dmSans.variable}`}>
+    <html lang="id" data-scroll-behavior="smooth" className={`${poppins.variable} ${dmSans.variable}`} suppressHydrationWarning>
       <body className="min-h-screen flex flex-col antialiased">
-        {children}
-        <Toaster richColors position="top-right" />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster richColors position="top-right" />
+        </ThemeProvider>
       </body>
     </html>
   )

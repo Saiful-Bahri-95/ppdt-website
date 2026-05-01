@@ -5,6 +5,10 @@ import { Calendar, Image as ImageIcon, Megaphone, Trophy, Wallet, ArrowRight, Tr
 import { requireAdmin } from '@/lib/auth'
 import { createClient } from '@/lib/supabase/server'
 import { formatRupiah } from '@/lib/format'
+import { SaldoTrendChart } from '@/components/charts/saldo-trend-chart'
+import { PemasukanPengeluaranChart } from '@/components/charts/pemasukan-pengeluaran-chart'
+import { KategoriPengeluaranChart } from '@/components/charts/kategori-pengeluaran-chart'
+import type { TransaksiKeuangan } from '@/lib/types/database'
 
 export const metadata = { title: 'Dashboard Admin' }
 
@@ -12,13 +16,12 @@ export default async function AdminDashboardPage() {
   const profile = await requireAdmin()
   const supabase = await createClient()
 
-  // Parallel fetch counts
   const [kegiatanCount, fotoCount, infoCount, arisanCount, transaksiData] = await Promise.all([
     supabase.from('kegiatan').select('*', { count: 'exact', head: true }),
     supabase.from('galeri_foto').select('*', { count: 'exact', head: true }),
     supabase.from('informasi_bulanan').select('*', { count: 'exact', head: true }),
     supabase.from('peserta_arisan').select('*', { count: 'exact', head: true }),
-    supabase.from('transaksi_keuangan').select('jenis, nominal'),
+    supabase.from('transaksi_keuangan').select('*'),
   ])
 
   const totalKegiatan = kegiatanCount.count || 0
@@ -26,10 +29,11 @@ export default async function AdminDashboardPage() {
   const totalInformasi = infoCount.count || 0
   const totalArisan = arisanCount.count || 0
 
-  const transaksi = transaksiData.data || []
+  const transaksi = (transaksiData.data || []) as TransaksiKeuangan[]
   const totalPemasukan = transaksi.filter(t => t.jenis === 'pemasukan').reduce((acc, t) => acc + t.nominal, 0)
   const totalPengeluaran = transaksi.filter(t => t.jenis === 'pengeluaran').reduce((acc, t) => acc + t.nominal, 0)
   const saldoTotal = totalPemasukan - totalPengeluaran
+  const hasData = transaksi.length > 0
 
   const quickStats = [
     { label: 'Total Kegiatan', value: totalKegiatan, icon: Calendar, color: 'from-red-500 to-orange-500', href: '/admin/kegiatan' },
@@ -98,6 +102,27 @@ export default async function AdminDashboardPage() {
           )
         })}
       </div>
+
+      {/* CHARTS */}
+      {hasData && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg md:text-xl font-display font-bold text-stone-900">📊 Analisa Keuangan</h2>
+            <Link href="/admin/keuangan">
+              <Badge className="bg-orange-100 text-orange-700 hover:bg-orange-200 border-0 cursor-pointer">
+                Detail <ArrowRight className="h-3 w-3 ml-1" />
+              </Badge>
+            </Link>
+          </div>
+
+          <SaldoTrendChart transaksi={transaksi} description="Perkembangan saldo bulanan" />
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <PemasukanPengeluaranChart transaksi={transaksi} description="Perbandingan arus kas" />
+            <KategoriPengeluaranChart transaksi={transaksi} description="Distribusi pengeluaran" />
+          </div>
+        </div>
+      )}
 
       <div>
         <div className="flex items-center justify-between mb-4">

@@ -11,7 +11,6 @@ import type { Kegiatan, PesertaArisan, TransaksiKeuangan } from '@/lib/types/dat
 export default async function HomePage() {
   const supabase = await createClient()
 
-  // Fetch data parallel
   const [kegiatanRes, arisanRes, keuanganRes] = await Promise.all([
     supabase.from('kegiatan').select('*').eq('status', 'published').order('tanggal_kegiatan', { ascending: false }).limit(3),
     supabase.from('peserta_arisan').select('*').order('tanggal_keluar', { ascending: false }).limit(1),
@@ -22,7 +21,6 @@ export default async function HomePage() {
   const pemenangTerbaru = (arisanRes.data?.[0] || null) as PesertaArisan | null
   const allKeuangan = (keuanganRes.data || []) as TransaksiKeuangan[]
 
-  // Total kegiatan (semua published)
   const { count: totalKegiatan } = await supabase
     .from('kegiatan')
     .select('*', { count: 'exact', head: true })
@@ -37,16 +35,16 @@ export default async function HomePage() {
       {/* HERO SECTION */}
       <section className="relative overflow-hidden bg-mesh-sunset py-20 md:py-32 -mt-16 md:-mt-20 pt-32 md:pt-40">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-orange-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob" />
-          <div className="absolute top-40 right-10 w-72 h-72 bg-red-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob" style={{ animationDelay: '2s' }} />
-          <div className="absolute -bottom-8 left-1/3 w-72 h-72 bg-amber-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob" style={{ animationDelay: '4s' }} />
+          <div className="absolute top-20 left-10 w-72 h-72 bg-orange-400 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob" />
+          <div className="absolute top-40 right-10 w-72 h-72 bg-red-400 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob" style={{ animationDelay: '2s' }} />
+          <div className="absolute -bottom-8 left-1/3 w-72 h-72 bg-amber-400 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob" style={{ animationDelay: '4s' }} />
         </div>
 
         <div className="container mx-auto px-4 relative">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-md border border-orange-200 rounded-full px-4 py-1.5 mb-8 animate-fade-in shadow-sm">
-              <Sparkles className="h-3.5 w-3.5 text-orange-600" />
-              <span className="text-xs font-semibold text-stone-700">Selamat Datang di Website Resmi</span>
+            <div className="inline-flex items-center gap-2 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md border border-orange-200 dark:border-orange-900/50 rounded-full px-4 py-1.5 mb-8 animate-fade-in shadow-sm">
+              <Sparkles className="h-3.5 w-3.5 text-orange-600 dark:text-orange-400" />
+              <span className="text-xs font-semibold text-stone-700 dark:text-stone-300">Selamat Datang di Website Resmi</span>
             </div>
 
             <div className="relative w-32 h-32 md:w-40 md:h-40 mx-auto mb-8 animate-float">
@@ -57,10 +55,10 @@ export default async function HomePage() {
             <h1 className="text-5xl md:text-7xl font-display font-extrabold mb-6 leading-[1.05] tracking-tight">
               <span className="text-gradient-sunset">Persatuan Pemuda</span>
               <br />
-              <span className="text-stone-900">Dukuh Tengah</span>
+              <span className="text-stone-900 dark:text-stone-50">Dukuh Tengah</span>
             </h1>
 
-            <p className="text-base md:text-xl text-stone-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base md:text-xl text-stone-600 dark:text-stone-400 mb-10 max-w-2xl mx-auto leading-relaxed">
               Wadah pemersatu pemuda dalam membangun lingkungan yang guyub, kreatif, dan berdaya melalui kegiatan sosial, budaya, dan kepemudaan.
             </p>
 
@@ -72,7 +70,7 @@ export default async function HomePage() {
                 </Button>
               </Link>
               <Link href="/kegiatan">
-                <Button size="lg" variant="outline" className="border-2 border-orange-300 bg-white/50 backdrop-blur-sm text-orange-700 hover:bg-orange-50 rounded-full px-8 h-12 w-full sm:w-auto">
+                <Button size="lg" variant="outline" className="border-2 border-orange-300 dark:border-orange-700 bg-white/50 dark:bg-stone-900/50 backdrop-blur-sm text-orange-700 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/50 rounded-full px-8 h-12 w-full sm:w-auto">
                   Lihat Kegiatan
                 </Button>
               </Link>
@@ -81,7 +79,7 @@ export default async function HomePage() {
         </div>
 
         <div className="absolute bottom-0 left-0 right-0">
-          <svg className="w-full h-12 md:h-20 fill-white" preserveAspectRatio="none" viewBox="0 0 1440 100">
+          <svg className="w-full h-12 md:h-20 fill-white dark:fill-stone-950" preserveAspectRatio="none" viewBox="0 0 1440 100">
             <path d="M0,50 C240,100 480,0 720,50 C960,100 1200,0 1440,50 L1440,100 L0,100 Z" />
           </svg>
         </div>
@@ -90,7 +88,7 @@ export default async function HomePage() {
       {/* QUICK STATS */}
       <section className="container mx-auto px-4 -mt-8 md:-mt-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
-          <Card className="group hover:shadow-2xl hover:shadow-red-500/20 transition-all duration-300 hover:-translate-y-1 border-0 bg-white/80 backdrop-blur-sm overflow-hidden">
+          <Card className="group hover:shadow-2xl hover:shadow-red-500/20 transition-all duration-300 hover:-translate-y-1 border-0 bg-white/80 dark:bg-stone-900/80 backdrop-blur-sm overflow-hidden">
             <CardContent className="p-6 relative">
               <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-red-400 to-red-600 rounded-full blur-2xl opacity-10 group-hover:opacity-20 transition" />
               <div className="flex items-center gap-4 relative">
@@ -98,11 +96,11 @@ export default async function HomePage() {
                   <Trophy className="h-6 w-6 text-white" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs text-stone-500 mb-0.5 font-medium">Pemenang Arisan Terbaru</p>
-                  <p className="font-display font-bold text-base truncate text-stone-900">
+                  <p className="text-xs text-stone-500 dark:text-stone-400 mb-0.5 font-medium">Pemenang Arisan Terbaru</p>
+                  <p className="font-display font-bold text-base truncate text-stone-900 dark:text-stone-50">
                     {pemenangTerbaru ? pemenangTerbaru.nama : 'Belum ada'}
                   </p>
-                  <p className="text-xs text-stone-500">
+                  <p className="text-xs text-stone-500 dark:text-stone-400">
                     {pemenangTerbaru ? formatTanggal(pemenangTerbaru.tanggal_keluar) : '-'}
                   </p>
                 </div>
@@ -110,7 +108,7 @@ export default async function HomePage() {
             </CardContent>
           </Card>
 
-          <Card className="group hover:shadow-2xl hover:shadow-orange-500/20 transition-all duration-300 hover:-translate-y-1 border-0 bg-white/80 backdrop-blur-sm overflow-hidden">
+          <Card className="group hover:shadow-2xl hover:shadow-orange-500/20 transition-all duration-300 hover:-translate-y-1 border-0 bg-white/80 dark:bg-stone-900/80 backdrop-blur-sm overflow-hidden">
             <CardContent className="p-6 relative">
               <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full blur-2xl opacity-10 group-hover:opacity-20 transition" />
               <div className="flex items-center gap-4 relative">
@@ -118,15 +116,15 @@ export default async function HomePage() {
                   <Wallet className="h-6 w-6 text-white" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs text-stone-500 mb-0.5 font-medium">Saldo Kas Terkini</p>
-                  <p className="font-display font-bold text-base truncate text-stone-900">{formatRupiah(saldoTotal)}</p>
-                  <p className="text-xs text-stone-500">Per {new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}</p>
+                  <p className="text-xs text-stone-500 dark:text-stone-400 mb-0.5 font-medium">Saldo Kas Terkini</p>
+                  <p className="font-display font-bold text-base truncate text-stone-900 dark:text-stone-50">{formatRupiah(saldoTotal)}</p>
+                  <p className="text-xs text-stone-500 dark:text-stone-400">Per {new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="group hover:shadow-2xl hover:shadow-amber-500/20 transition-all duration-300 hover:-translate-y-1 border-0 bg-white/80 backdrop-blur-sm overflow-hidden">
+          <Card className="group hover:shadow-2xl hover:shadow-amber-500/20 transition-all duration-300 hover:-translate-y-1 border-0 bg-white/80 dark:bg-stone-900/80 backdrop-blur-sm overflow-hidden">
             <CardContent className="p-6 relative">
               <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full blur-2xl opacity-10 group-hover:opacity-20 transition" />
               <div className="flex items-center gap-4 relative">
@@ -134,9 +132,9 @@ export default async function HomePage() {
                   <Users className="h-6 w-6 text-white" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs text-stone-500 mb-0.5 font-medium">Total Kegiatan</p>
-                  <p className="font-display font-bold text-base text-stone-900">{totalKegiatan || 0} Kegiatan</p>
-                  <p className="text-xs text-stone-500">Sudah dilaksanakan</p>
+                  <p className="text-xs text-stone-500 dark:text-stone-400 mb-0.5 font-medium">Total Kegiatan</p>
+                  <p className="font-display font-bold text-base text-stone-900 dark:text-stone-50">{totalKegiatan || 0} Kegiatan</p>
+                  <p className="text-xs text-stone-500 dark:text-stone-400">Sudah dilaksanakan</p>
                 </div>
               </div>
             </CardContent>
@@ -149,16 +147,16 @@ export default async function HomePage() {
         <section className="container mx-auto px-4 py-20 md:py-28">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-4">
             <div>
-              <Badge className="mb-3 bg-orange-100 text-orange-700 hover:bg-orange-100 border-0 px-3 py-1 text-xs font-semibold">
+              <Badge className="mb-3 bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-400 hover:bg-orange-100 border-0 px-3 py-1 text-xs font-semibold">
                 ✨ Kegiatan Terbaru
               </Badge>
-              <h2 className="text-4xl md:text-5xl font-display font-extrabold text-stone-900 leading-tight">
-                Kegiatan <span className="text-gradient-sunset">Kami</span>
+              <h2 className="text-4xl md:text-5xl font-display font-extrabold text-stone-900 dark:text-stone-50 leading-tight">
+                Yang Sedang <span className="text-gradient-sunset">Kami Kerjakan</span>
               </h2>
-              <p className="text-stone-600 mt-3 text-lg">Berbagai kegiatan terkini PPDT untuk masyarakat</p>
+              <p className="text-stone-600 dark:text-stone-400 mt-3 text-lg">Berbagai kegiatan terkini PPDT untuk masyarakat</p>
             </div>
             <Link href="/kegiatan">
-              <Button variant="outline" className="border-2 border-orange-300 text-orange-700 hover:bg-orange-50 rounded-full">
+              <Button variant="outline" className="border-2 border-orange-300 dark:border-orange-700 text-orange-700 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/50 rounded-full">
                 Lihat Semua
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -168,8 +166,8 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {kegiatanTerbaru.map((kegiatan, idx) => (
               <Link key={kegiatan.id} href={`/kegiatan/${kegiatan.slug}`} className="group">
-                <Card className="overflow-hidden h-full hover:shadow-2xl hover:shadow-orange-500/20 transition-all duration-500 group-hover:-translate-y-2 border-0 bg-white pt-0">
-                  <div className="relative aspect-video w-full overflow-hidden bg-stone-100">
+                <Card className="overflow-hidden h-full hover:shadow-2xl hover:shadow-orange-500/20 transition-all duration-500 group-hover:-translate-y-2 border-0 bg-white dark:bg-stone-900 pt-0">
+                  <div className="relative aspect-video w-full overflow-hidden bg-stone-100 dark:bg-stone-800">
                     {kegiatan.foto_header_url && (
                       <Image
                         src={kegiatan.foto_header_url}
@@ -181,19 +179,19 @@ export default async function HomePage() {
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                     <div className="absolute top-3 left-3">
-                      <Badge className="bg-white/90 backdrop-blur-sm text-orange-700 border-0 font-semibold">
+                      <Badge className="bg-white/90 dark:bg-stone-900/90 backdrop-blur-sm text-orange-700 dark:text-orange-400 border-0 font-semibold">
                         #{idx + 1}
                       </Badge>
                     </div>
                   </div>
                   <CardContent className="p-6">
-                    <h3 className="font-display font-bold text-xl mb-2 line-clamp-2 group-hover:text-orange-600 transition">
+                    <h3 className="font-display font-bold text-xl mb-2 line-clamp-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition text-stone-900 dark:text-stone-50">
                       {kegiatan.judul}
                     </h3>
-                    <p className="text-sm text-stone-600 mb-4 line-clamp-2 leading-relaxed">
+                    <p className="text-sm text-stone-600 dark:text-stone-400 mb-4 line-clamp-2 leading-relaxed">
                       {kegiatan.ringkasan || truncate(kegiatan.deskripsi, 120)}
                     </p>
-                    <div className="flex items-center gap-4 text-xs text-stone-500 pt-3 border-t border-stone-100">
+                    <div className="flex items-center gap-4 text-xs text-stone-500 dark:text-stone-400 pt-3 border-t border-stone-100 dark:border-stone-800">
                       <span className="flex items-center gap-1.5">
                         <Calendar className="h-3.5 w-3.5 text-orange-500" />
                         {formatTanggal(kegiatan.tanggal_kegiatan)}
@@ -213,7 +211,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* CTA SECTION */}
+      {/* CTA */}
       <section className="container mx-auto px-4 pb-24 pt-12">
         <div className="relative bg-gradient-to-br from-red-600 via-red-500 to-orange-500 rounded-[2.5rem] p-10 md:p-16 text-white text-center overflow-hidden shadow-2xl shadow-orange-500/30">
           <div className="absolute inset-0 opacity-20">

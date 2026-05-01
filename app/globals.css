@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 
 /* ============================================
-   PPDT Design System - Sunset Vibrant Theme
+   PPDT Design System - Sunset + Dark Mode
    ============================================ */
 
 @theme inline {
@@ -29,7 +29,7 @@
   --color-primary-600: #dc2626;
   --color-primary-700: #b91c1c;
 
-  /* shadcn/ui semantic tokens */
+  /* shadcn/ui semantic tokens - mapped to CSS variables */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -88,7 +88,7 @@
   50% { transform: translateY(-10px); }
 }
 
-/* Base Theme - using OKLCH-like values via direct hex for clarity */
+/* ===== LIGHT THEME (default) ===== */
 :root {
   --radius: 0.75rem;
 
@@ -119,6 +119,50 @@
   --border: #e7e5e4;
   --input: #e7e5e4;
   --ring: #f97316;
+
+  /* Custom for theme-aware components */
+  --surface: #ffffff;
+  --surface-elevated: #ffffff;
+  --text-primary: #1c1917;
+  --text-secondary: #57534e;
+  --text-tertiary: #78716c;
+}
+
+/* ===== DARK THEME ===== */
+.dark {
+  --background: #0c0a09;
+  --foreground: #fafaf9;
+
+  --card: #1c1917;
+  --card-foreground: #fafaf9;
+
+  --popover: #1c1917;
+  --popover-foreground: #fafaf9;
+
+  --primary: #fb923c;
+  --primary-foreground: #1c1917;
+
+  --secondary: #292524;
+  --secondary-foreground: #fafaf9;
+
+  --muted: #292524;
+  --muted-foreground: #a8a29e;
+
+  --accent: #292524;
+  --accent-foreground: #fafaf9;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #fafaf9;
+
+  --border: #44403c;
+  --input: #44403c;
+  --ring: #fb923c;
+
+  --surface: #1c1917;
+  --surface-elevated: #292524;
+  --text-primary: #fafaf9;
+  --text-secondary: #d6d3d1;
+  --text-tertiary: #a8a29e;
 }
 
 @layer base {
@@ -131,6 +175,7 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
@@ -138,12 +183,17 @@
   }
 }
 
-/* Glass effect */
+/* Glass effect - light & dark variants */
 .glass {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dark .glass {
+  background: rgba(28, 25, 23, 0.7);
+  border: 1px solid rgba(68, 64, 60, 0.5);
 }
 
 .glass-dark {
@@ -152,7 +202,7 @@
   -webkit-backdrop-filter: blur(12px) saturate(180%);
 }
 
-/* Gradient text */
+/* Gradient text - same in both modes (looks beautiful in both) */
 .text-gradient-sunset {
   background: linear-gradient(135deg, #dc2626 0%, #f97316 50%, #f59e0b 100%);
   -webkit-background-clip: text;
@@ -160,7 +210,14 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Mesh gradient background */
+.dark .text-gradient-sunset {
+  background: linear-gradient(135deg, #f87171 0%, #fb923c 50%, #fbbf24 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Mesh gradient - light & dark variants */
 .bg-mesh-sunset {
   background-color: #fff7ed;
   background-image:
@@ -168,6 +225,15 @@
     radial-gradient(at 80% 0%, rgba(220, 38, 38, 0.12) 0px, transparent 50%),
     radial-gradient(at 0% 80%, rgba(245, 158, 11, 0.1) 0px, transparent 50%),
     radial-gradient(at 80% 80%, rgba(251, 146, 60, 0.1) 0px, transparent 50%);
+}
+
+.dark .bg-mesh-sunset {
+  background-color: #0c0a09;
+  background-image:
+    radial-gradient(at 20% 20%, rgba(249, 115, 22, 0.18) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(220, 38, 38, 0.15) 0px, transparent 50%),
+    radial-gradient(at 0% 80%, rgba(245, 158, 11, 0.12) 0px, transparent 50%),
+    radial-gradient(at 80% 80%, rgba(251, 146, 60, 0.13) 0px, transparent 50%);
 }
 
 /* Glow effect */
@@ -180,13 +246,16 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - light & dark variants */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 ::-webkit-scrollbar-track {
   background: #fff7ed;
+}
+.dark ::-webkit-scrollbar-track {
+  background: #1c1917;
 }
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #f97316, #dc2626);

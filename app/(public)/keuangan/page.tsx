@@ -3,6 +3,9 @@ import { Badge } from '@/components/ui/badge'
 import { TrendingUp, TrendingDown, Wallet, Sparkles, ArrowUpCircle, ArrowDownCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { formatRupiah, formatTanggal, formatPeriode } from '@/lib/format'
+import { SaldoTrendChart } from '@/components/charts/saldo-trend-chart'
+import { PemasukanPengeluaranChart } from '@/components/charts/pemasukan-pengeluaran-chart'
+import { KategoriPengeluaranChart } from '@/components/charts/kategori-pengeluaran-chart'
 import type { TransaksiKeuangan } from '@/lib/types/database'
 
 export const metadata = { title: 'Laporan Keuangan' }
@@ -50,6 +53,7 @@ export default async function KeuanganPage() {
   const saldoTotal = totalPemasukan - totalPengeluaran
   const rekapBulanan = hitungRekapBulanan(transaksi)
   const transaksiTerbaru = transaksi.slice(0, 10)
+  const hasData = transaksi.length > 0
 
   return (
     <>
@@ -76,6 +80,7 @@ export default async function KeuanganPage() {
         </div>
       </section>
 
+      {/* SALDO BESAR */}
       <section className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <Card className="border-0 bg-gradient-to-br from-red-600 via-orange-500 to-amber-500 text-white shadow-2xl shadow-orange-500/30 overflow-hidden">
@@ -100,6 +105,7 @@ export default async function KeuanganPage() {
         </div>
       </section>
 
+      {/* STATS */}
       <section className="container mx-auto px-4 py-4">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card className="border-0 bg-white shadow-lg shadow-green-500/10">
@@ -131,9 +137,46 @@ export default async function KeuanganPage() {
         </div>
       </section>
 
-      {rekapBulanan.length > 0 && (
+      {/* CHARTS - VISUALISASI DATA */}
+      {hasData && (
         <section className="container mx-auto px-4 py-12">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-8">
+              <Badge className="mb-3 bg-orange-100 text-orange-700 hover:bg-orange-100 border-0 px-3 py-1 text-xs font-semibold">
+                📈 Visualisasi Data
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-display font-extrabold text-stone-900">
+                Analisa <span className="text-gradient-sunset">Visual</span>
+              </h2>
+              <p className="text-stone-600 mt-2">Pantau perkembangan keuangan dalam grafik interaktif</p>
+            </div>
+
+            {/* Trend Saldo */}
+            <div className="mb-6">
+              <SaldoTrendChart
+                transaksi={transaksi}
+                description="Perkembangan saldo kas dari bulan ke bulan"
+              />
+            </div>
+
+            {/* Pemasukan vs Pengeluaran + Kategori */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <PemasukanPengeluaranChart
+                transaksi={transaksi}
+                description="Perbandingan arus kas per bulan"
+              />
+              <KategoriPengeluaranChart
+                transaksi={transaksi}
+                description="Distribusi pengeluaran berdasarkan kategori"
+              />
+            </div>
+          </div>
+        </section>
+      )}
+
+      {rekapBulanan.length > 0 && (
+        <section className="container mx-auto px-4 py-12 bg-orange-50/50 -mx-4 md:mx-0 md:rounded-3xl">
+          <div className="max-w-4xl mx-auto px-4">
             <div className="text-center mb-8">
               <Badge className="mb-3 bg-orange-100 text-orange-700 hover:bg-orange-100 border-0 px-3 py-1 text-xs font-semibold">📊 Rekap Bulanan</Badge>
               <h2 className="text-3xl md:text-4xl font-display font-extrabold text-stone-900">
@@ -183,8 +226,8 @@ export default async function KeuanganPage() {
       )}
 
       {transaksiTerbaru.length > 0 && (
-        <section className="container mx-auto px-4 py-12 bg-orange-50/50 -mx-4 md:mx-0 md:rounded-3xl">
-          <div className="max-w-4xl mx-auto px-4">
+        <section className="container mx-auto px-4 py-12">
+          <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8">
               <Badge className="mb-3 bg-orange-100 text-orange-700 hover:bg-orange-100 border-0 px-3 py-1 text-xs font-semibold">💸 Transaksi Terbaru</Badge>
               <h2 className="text-3xl md:text-4xl font-display font-extrabold text-stone-900">
