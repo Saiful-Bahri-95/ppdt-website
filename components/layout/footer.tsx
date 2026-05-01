@@ -78,11 +78,11 @@ export function Footer() {
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start gap-2">
                   <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0 text-orange-200" />
-                  <span className="text-orange-100">Dukuh Tengah, Indonesia</span>
+                  <span className="text-orange-100">Dk Tengah - Tamansari - Jatinegara, Kab. Tegal</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Mail className="h-4 w-4 flex-shrink-0 text-orange-200" />
-                  <a href="mailto:ppdt.dukuhtengah@gmail.com" className="text-orange-100 hover:text-white transition">ppdt.dukuhtengah@gmail.com</a>
+                  <a href="mailto:offical.ppdt@gmail.com" className="text-orange-100 hover:text-white transition">offical.ppdt@gmail.com</a>
                 </li>
               </ul>
 
@@ -101,7 +101,7 @@ export function Footer() {
           </div>
 
           <div className="border-t border-white/20 mt-12 pt-6 text-center text-sm text-orange-100">
-            <p>&copy; {tahunIni} <span className="font-semibold">Persatuan Pemuda Dukuh Tengah</span>. Semua hak dilindungi.</p>
+            <p>&copy; {tahunIni} <span className="font-semibold">Persatuan Pemuda Dukuh Tengah</span></p>
           </div>
         </div>
       </div>

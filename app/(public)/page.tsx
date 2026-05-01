@@ -153,7 +153,7 @@ export default async function HomePage() {
                 ✨ Kegiatan Terbaru
               </Badge>
               <h2 className="text-4xl md:text-5xl font-display font-extrabold text-stone-900 leading-tight">
-                Yang Sedang <span className="text-gradient-sunset">Kami Kerjakan</span>
+                Kegiatan <span className="text-gradient-sunset">Kami</span>
               </h2>
               <p className="text-stone-600 mt-3 text-lg">Berbagai kegiatan terkini PPDT untuk masyarakat</p>
             </div>
