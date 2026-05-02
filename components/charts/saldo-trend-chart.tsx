@@ -1,8 +1,8 @@
 'use client'
 
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -30,7 +30,6 @@ interface ChartData {
 }
 
 function buildChartData(transaksi: TransaksiKeuangan[]): ChartData[] {
-  // Group by bulan-tahun
   const sortedTransaksi = [...transaksi].sort(
     (a, b) => new Date(a.tanggal).getTime() - new Date(b.tanggal).getTime()
   )
@@ -51,7 +50,6 @@ function buildChartData(transaksi: TransaksiKeuangan[]): ChartData[] {
     entry.saldoBulan += t.jenis === 'pemasukan' ? t.nominal : -t.nominal
   }
 
-  // Build cumulative saldo
   const sortedKeys = Array.from(monthlyMap.keys()).sort()
   let runningSaldo = 0
   const data: ChartData[] = []
@@ -71,25 +69,36 @@ function buildChartData(transaksi: TransaksiKeuangan[]): ChartData[] {
 }
 
 export function SaldoTrendChart({ transaksi, title = 'Tren Saldo Bulanan', description }: SaldoTrendChartProps) {
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+
+  const isDark = mounted && resolvedTheme === 'dark'
   const data = buildChartData(transaksi)
 
   if (data.length === 0) {
     return (
-      <Card className="border-0 bg-white">
+      <Card className="border-0 bg-white dark:bg-stone-900">
         <CardContent className="p-12 text-center">
-          <TrendingUp className="h-16 w-16 mx-auto text-stone-300 mb-4" />
-          <p className="text-stone-500">Belum ada data transaksi untuk ditampilkan.</p>
+          <TrendingUp className="h-16 w-16 mx-auto text-stone-300 dark:text-stone-600 mb-4" />
+          <p className="text-stone-500 dark:text-stone-400">Belum ada data transaksi untuk ditampilkan.</p>
         </CardContent>
       </Card>
     )
   }
 
+  const gridColor = isDark ? '#44403c' : '#e7e5e4'
+  const axisColor = isDark ? '#a8a29e' : '#78716c'
+  const tooltipBg = isDark ? '#1c1917' : 'white'
+  const tooltipBorder = isDark ? '#44403c' : '#e7e5e4'
+  const tooltipText = isDark ? '#fafaf9' : '#1c1917'
+
   return (
-    <Card className="border-0 bg-white shadow-lg shadow-orange-500/10">
+    <Card className="border-0 bg-white dark:bg-stone-900 shadow-lg shadow-orange-500/10">
       <CardContent className="p-6">
         <div className="mb-4">
-          <h3 className="font-display font-bold text-lg md:text-xl text-stone-900">{title}</h3>
-          {description && <p className="text-sm text-stone-500 mt-1">{description}</p>}
+          <h3 className="font-display font-bold text-lg md:text-xl text-stone-900 dark:text-stone-50">{title}</h3>
+          {description && <p className="text-sm text-stone-500 dark:text-stone-400 mt-1">{description}</p>}
         </div>
 
         <ResponsiveContainer width="100%" height={300}>
@@ -100,16 +109,16 @@ export function SaldoTrendChart({ transaksi, title = 'Tren Saldo Bulanan', descr
                 <stop offset="100%" stopColor="#f97316" stopOpacity={0.05} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e7e5e4" />
+            <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
             <XAxis
               dataKey="bulan"
-              stroke="#78716c"
+              stroke={axisColor}
               fontSize={12}
               tickLine={false}
               axisLine={false}
             />
             <YAxis
-              stroke="#78716c"
+              stroke={axisColor}
               fontSize={11}
               tickLine={false}
               axisLine={false}
@@ -117,12 +126,15 @@ export function SaldoTrendChart({ transaksi, title = 'Tren Saldo Bulanan', descr
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: 'white',
-                border: '1px solid #e7e5e4',
+                backgroundColor: tooltipBg,
+                border: `1px solid ${tooltipBorder}`,
                 borderRadius: '12px',
                 fontSize: '13px',
                 boxShadow: '0 4px 20px rgba(249, 115, 22, 0.15)',
+                color: tooltipText,
               }}
+              labelStyle={{ color: tooltipText }}
+              itemStyle={{ color: tooltipText }}
               formatter={(value) => [formatRupiah(Number(value)), 'Saldo']}
               labelFormatter={(label, payload) => {
                 if (payload && payload.length > 0) {

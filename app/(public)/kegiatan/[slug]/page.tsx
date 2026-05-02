@@ -102,13 +102,13 @@ export default async function DetailKegiatanPage({ params }: PageProps) {
 
       <section className="container mx-auto px-4 py-12 md:py-16">
         <div className="max-w-4xl mx-auto">
-          <Card className="border-0 shadow-xl shadow-orange-500/10 overflow-hidden bg-white">
+          <Card className="border-0 shadow-xl shadow-orange-500/10 overflow-hidden bg-white dark:bg-stone-900">
             <CardContent className="p-8 md:p-10 relative">
               <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-red-500 via-orange-500 to-amber-500" />
-              <h2 className="text-2xl md:text-3xl font-display font-bold text-stone-900 mb-5">
+              <h2 className="text-2xl md:text-3xl font-display font-bold text-stone-900 dark:text-stone-50 mb-5">
                 Tentang Kegiatan
               </h2>
-              <div className="text-stone-700 leading-relaxed whitespace-pre-line text-base md:text-lg">
+              <div className="text-stone-700 dark:text-stone-300 leading-relaxed whitespace-pre-line text-base md:text-lg">
                 {k.deskripsi}
               </div>
             </CardContent>
@@ -117,21 +117,21 @@ export default async function DetailKegiatanPage({ params }: PageProps) {
       </section>
 
       {galeriKegiatan.length > 0 && (
-        <section className="bg-orange-50/50 py-12 md:py-16">
+        <section className="bg-orange-50/50 dark:bg-orange-950/20 py-12 md:py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-10">
-                <Badge className="mb-3 bg-orange-100 text-orange-700 hover:bg-orange-100 border-0 px-3 py-1 text-xs font-semibold">
+                <Badge className="mb-3 bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-400 hover:bg-orange-100 border-0 px-3 py-1 text-xs font-semibold">
                   📸 Dokumentasi
                 </Badge>
-                <h2 className="text-3xl md:text-4xl font-display font-extrabold text-stone-900">
+                <h2 className="text-3xl md:text-4xl font-display font-extrabold text-stone-900 dark:text-stone-50">
                   Galeri <span className="text-gradient-sunset">Kegiatan</span>
                 </h2>
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
                 {galeriKegiatan.map((foto) => (
-                  <div key={foto.id} className="group relative aspect-square overflow-hidden rounded-2xl bg-stone-200 shadow-md hover:shadow-2xl hover:shadow-orange-500/20 transition-all">
+                  <div key={foto.id} className="group relative aspect-square overflow-hidden rounded-2xl bg-stone-200 dark:bg-stone-800 shadow-md hover:shadow-2xl hover:shadow-orange-500/20 transition-all">
                     <Image
                       src={foto.foto_url}
                       alt={foto.caption || k.judul}
@@ -156,11 +156,11 @@ export default async function DetailKegiatanPage({ params }: PageProps) {
         <section className="container mx-auto px-4 py-12 md:py-20">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl md:text-3xl font-display font-extrabold text-stone-900">
+              <h2 className="text-2xl md:text-3xl font-display font-extrabold text-stone-900 dark:text-stone-50">
                 Kegiatan <span className="text-gradient-sunset">Lainnya</span>
               </h2>
               <Link href="/kegiatan">
-                <Button variant="outline" className="border-2 border-orange-300 text-orange-700 hover:bg-orange-50 rounded-full" size="sm">
+                <Button variant="outline" className="border-2 border-orange-300 dark:border-orange-700 text-orange-700 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/50 rounded-full" size="sm">
                   Semua
                 </Button>
               </Link>
@@ -169,8 +169,8 @@ export default async function DetailKegiatanPage({ params }: PageProps) {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {kegiatanLain.map((kk) => (
                 <Link key={kk.id} href={`/kegiatan/${kk.slug}`} className="group">
-                  <Card className="overflow-hidden h-full hover:shadow-2xl hover:shadow-orange-500/20 transition-all duration-500 group-hover:-translate-y-1 border-0 bg-white pt-0">
-                    <div className="relative aspect-video w-full overflow-hidden bg-stone-100">
+                  <Card className="overflow-hidden h-full hover:shadow-2xl hover:shadow-orange-500/20 transition-all duration-500 group-hover:-translate-y-1 border-0 bg-white dark:bg-stone-900 pt-0">
+                    <div className="relative aspect-video w-full overflow-hidden bg-stone-100 dark:bg-stone-800">
                       {kk.foto_header_url && (
                         <Image
                           src={kk.foto_header_url}
@@ -182,10 +182,10 @@ export default async function DetailKegiatanPage({ params }: PageProps) {
                       )}
                     </div>
                     <CardContent className="p-5">
-                      <h3 className="font-display font-bold text-base mb-2 line-clamp-2 group-hover:text-orange-600 transition">
+                      <h3 className="font-display font-bold text-base mb-2 line-clamp-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition text-stone-900 dark:text-stone-50">
                         {kk.judul}
                       </h3>
-                      <span className="text-xs text-stone-500 flex items-center gap-1">
+                      <span className="text-xs text-stone-500 dark:text-stone-400 flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         {formatTanggal(kk.tanggal_kegiatan)}
                       </span>
