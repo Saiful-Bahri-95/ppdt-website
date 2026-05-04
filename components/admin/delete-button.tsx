@@ -16,20 +16,17 @@ import { Trash2, Loader2, AlertTriangle } from 'lucide-react'
 interface DeleteButtonProps {
   itemName: string
   onDelete: () => Promise<void>
-  variant?: 'icon' | 'full'
 }
 
-export function DeleteButton({ itemName, onDelete, variant = 'icon' }: DeleteButtonProps) {
+export function DeleteButton({ itemName, onDelete }: DeleteButtonProps) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  async function handleDelete() {
+  async function handleConfirm() {
     setLoading(true)
     try {
       await onDelete()
       setOpen(false)
-    } catch (error) {
-      console.error(error)
     } finally {
       setLoading(false)
     }
@@ -38,47 +35,33 @@ export function DeleteButton({ itemName, onDelete, variant = 'icon' }: DeleteBut
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {variant === 'icon' ? (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-stone-400 hover:text-red-600 hover:bg-red-50"
-            aria-label="Hapus"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        ) : (
-          <Button variant="outline" className="text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700">
-            <Trash2 className="mr-2 h-4 w-4" />
-            Hapus
-          </Button>
-        )}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 text-stone-400 hover:text-red-400 hover:bg-red-950/50"
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <div className="w-12 h-12 mx-auto rounded-full bg-red-100 flex items-center justify-center mb-2">
-            <AlertTriangle className="h-6 w-6 text-red-600" />
+          <div className="w-12 h-12 mx-auto rounded-full bg-red-950/50 flex items-center justify-center mb-2">
+            <AlertTriangle className="h-6 w-6 text-red-400" />
           </div>
           <DialogTitle className="text-center">Hapus {itemName}?</DialogTitle>
           <DialogDescription className="text-center">
-            Tindakan ini tidak dapat dibatalkan. Data akan dihapus secara permanen.
+            Tindakan ini tidak dapat dibatalkan.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="sm:justify-center gap-2">
           <Button variant="outline" onClick={() => setOpen(false)} disabled={loading}>
             Batal
           </Button>
-          <Button onClick={handleDelete} disabled={loading} className="bg-red-600 hover:bg-red-700 text-white">
+          <Button onClick={handleConfirm} disabled={loading} className="bg-red-600 hover:bg-red-700 text-white">
             {loading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Menghapus...
-              </>
+              <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Menghapus...</>
             ) : (
-              <>
-                <Trash2 className="mr-2 h-4 w-4" />
-                Ya, Hapus
-              </>
+              <><Trash2 className="mr-2 h-4 w-4" />Ya, Hapus</>
             )}
           </Button>
         </DialogFooter>

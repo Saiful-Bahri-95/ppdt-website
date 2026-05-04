@@ -1,21 +1,14 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { AdminShell } from '../admin/admin-shell'
-import type { Profile } from '@/lib/types/database'
+import { AdminShell } from './admin-shell'
 
-export default async function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Pengecualian: halaman /admin/login tidak butuh auth
-  // (cek dilakukan di proxy.ts middleware)
-
+  // Login page is exception — handled by middleware
   if (!user) {
-    return <>{children}</>
+    return <div className="min-h-screen bg-stone-950">{children}</div>
   }
 
   const { data: profile } = await supabase
@@ -28,5 +21,11 @@ export default async function AdminLayout({
     redirect('/admin/login')
   }
 
-  return <AdminShell profile={profile as Profile}>{children}</AdminShell>
+  return (
+    <div className="min-h-screen bg-stone-950">
+      <AdminShell profile={profile}>
+        {children}
+      </AdminShell>
+    </div>
+  )
 }

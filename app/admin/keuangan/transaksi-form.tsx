@@ -27,7 +27,6 @@ export function TransaksiForm({ transaksi }: { transaksi?: TransaksiKeuangan }) 
   const [nominal, setNominal] = useState<string>(transaksi?.nominal?.toString() || '')
   const [keterangan, setKeterangan] = useState(transaksi?.keterangan || '')
 
-  // Saat ganti jenis, reset kategori ke yang valid
   function handleJenisChange(newJenis: TransactionType) {
     setJenis(newJenis)
     const validKategori = newJenis === 'pemasukan' ? KATEGORI_PEMASUKAN : KATEGORI_PENGELUARAN
@@ -79,11 +78,11 @@ export function TransaksiForm({ transaksi }: { transaksi?: TransaksiKeuangan }) 
 
   return (
     <form onSubmit={handleSubmit}>
-      <Card className="border-0 bg-white">
+      <Card className="border-0 bg-stone-900">
         <CardContent className="p-6 md:p-8 space-y-5">
           <div className="space-y-2">
-            <Label className="font-semibold">
-              Jenis Transaksi <span className="text-red-500">*</span>
+            <Label className="font-semibold text-stone-200">
+              Jenis Transaksi <span className="text-red-400">*</span>
             </Label>
             <div className="grid grid-cols-2 gap-3">
               <button
@@ -91,8 +90,8 @@ export function TransaksiForm({ transaksi }: { transaksi?: TransaksiKeuangan }) 
                 onClick={() => handleJenisChange('pemasukan')}
                 className={`p-4 rounded-2xl border-2 font-semibold transition ${
                   jenis === 'pemasukan'
-                    ? 'border-green-500 bg-green-50 text-green-700'
-                    : 'border-stone-200 text-stone-500 hover:border-stone-300'
+                    ? 'border-green-500 bg-green-950/50 text-green-400'
+                    : 'border-stone-800 text-stone-400 hover:border-stone-700 bg-stone-950/50'
                 }`}
               >
                 ⬆️ Pemasukan
@@ -102,8 +101,8 @@ export function TransaksiForm({ transaksi }: { transaksi?: TransaksiKeuangan }) 
                 onClick={() => handleJenisChange('pengeluaran')}
                 className={`p-4 rounded-2xl border-2 font-semibold transition ${
                   jenis === 'pengeluaran'
-                    ? 'border-red-500 bg-red-50 text-red-700'
-                    : 'border-stone-200 text-stone-500 hover:border-stone-300'
+                    ? 'border-red-500 bg-red-950/50 text-red-400'
+                    : 'border-stone-800 text-stone-400 hover:border-stone-700 bg-stone-950/50'
                 }`}
               >
                 ⬇️ Pengeluaran
@@ -113,17 +112,17 @@ export function TransaksiForm({ transaksi }: { transaksi?: TransaksiKeuangan }) 
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="tanggal" className="font-semibold">
-                Tanggal <span className="text-red-500">*</span>
+              <Label htmlFor="tanggal" className="font-semibold text-stone-200">
+                Tanggal <span className="text-red-400">*</span>
               </Label>
-              <Input id="tanggal" type="date" value={tanggal} onChange={(e) => setTanggal(e.target.value)} required className="h-11" />
+              <Input id="tanggal" type="date" value={tanggal} onChange={(e) => setTanggal(e.target.value)} required className="h-11 bg-stone-950 border-stone-800 text-stone-100" />
             </div>
             <div className="space-y-2">
-              <Label className="font-semibold">
-                Kategori <span className="text-red-500">*</span>
+              <Label className="font-semibold text-stone-200">
+                Kategori <span className="text-red-400">*</span>
               </Label>
               <Select value={kategori} onValueChange={setKategori}>
-                <SelectTrigger className="h-11">
+                <SelectTrigger className="h-11 bg-stone-950 border-stone-800 text-stone-100">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -136,8 +135,8 @@ export function TransaksiForm({ transaksi }: { transaksi?: TransaksiKeuangan }) 
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="nominal" className="font-semibold">
-              Nominal (Rp) <span className="text-red-500">*</span>
+            <Label htmlFor="nominal" className="font-semibold text-stone-200">
+              Nominal (Rp) <span className="text-red-400">*</span>
             </Label>
             <Input
               id="nominal"
@@ -147,19 +146,20 @@ export function TransaksiForm({ transaksi }: { transaksi?: TransaksiKeuangan }) 
               onChange={(e) => setNominal(e.target.value)}
               required
               placeholder="500000"
-              className="h-11"
+              className="h-11 bg-stone-950 border-stone-800 text-stone-100 placeholder:text-stone-500"
             />
             <p className="text-xs text-stone-500">Tulis tanpa titik atau koma. Contoh: 500000 untuk 500 ribu.</p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="keterangan" className="font-semibold">Keterangan</Label>
+            <Label htmlFor="keterangan" className="font-semibold text-stone-200">Keterangan</Label>
             <Textarea
               id="keterangan"
               value={keterangan}
               onChange={(e) => setKeterangan(e.target.value)}
               placeholder="Detail transaksi..."
               rows={3}
+              className="bg-stone-950 border-stone-800 text-stone-100 placeholder:text-stone-500"
             />
           </div>
 

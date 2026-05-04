@@ -45,7 +45,7 @@ export default async function AdminArisanPage() {
             <Card key={peserta.id} className={`border-0 transition-all overflow-hidden ${
               idx === 0
                 ? 'bg-gradient-to-br from-red-500 via-orange-500 to-amber-500 text-white shadow-xl shadow-orange-500/30'
-                : 'bg-white hover:shadow-lg'
+                : 'bg-stone-900 hover:shadow-lg'
             }`}>
               <CardContent className="p-5">
                 <div className="flex items-center gap-4">
@@ -59,7 +59,7 @@ export default async function AdminArisanPage() {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <h3 className={`font-display font-bold text-base ${idx === 0 ? 'text-white' : 'text-stone-900'}`}>
+                      <h3 className={`font-display font-bold text-base ${idx === 0 ? 'text-white' : 'text-stone-50'}`}>
                         {peserta.nama}
                       </h3>
                       {idx === 0 && (
@@ -69,14 +69,14 @@ export default async function AdminArisanPage() {
                         </Badge>
                       )}
                     </div>
-                    <div className={`flex flex-wrap items-center gap-3 text-xs ${idx === 0 ? 'text-orange-100' : 'text-stone-500'}`}>
+                    <div className={`flex flex-wrap items-center gap-3 text-xs ${idx === 0 ? 'text-orange-100' : 'text-stone-400'}`}>
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         {formatTanggal(peserta.tanggal_keluar)}
                       </span>
                       <span>{peserta.periode_arisan}</span>
                       {peserta.nominal && (
-                        <span className={`font-semibold ${idx === 0 ? 'text-white' : 'text-orange-600'}`}>
+                        <span className={`font-semibold ${idx === 0 ? 'text-white' : 'text-orange-400'}`}>
                           {formatRupiah(peserta.nominal)}
                         </span>
                       )}
@@ -88,7 +88,7 @@ export default async function AdminArisanPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className={`h-8 w-8 ${idx === 0 ? 'text-white hover:bg-white/20' : 'text-stone-500 hover:text-orange-600'}`}
+                        className={`h-8 w-8 ${idx === 0 ? 'text-white hover:bg-white/20' : 'text-stone-400 hover:text-orange-400 hover:bg-stone-800'}`}
                       >
                         <Edit className="h-4 w-4" />
                       </Button>

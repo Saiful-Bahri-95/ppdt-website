@@ -12,23 +12,28 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { getNamaBulan } from '@/lib/format'
-import type { InformasiBulanan } from '@/lib/types/database'
+import type { InformasiBulanan, ContentStatus } from '@/lib/types/database'
 
-const TAHUN_NOW = new Date().getFullYear()
-const BULAN_NOW = new Date().getMonth() + 1
-const TAHUN_OPTIONS = Array.from({ length: 5 }, (_, i) => TAHUN_NOW - 2 + i)
-const BULAN_OPTIONS = Array.from({ length: 12 }, (_, i) => i + 1)
+interface InformasiFormProps {
+  informasi?: InformasiBulanan
+}
 
-export function InformasiForm({ informasi }: { informasi?: InformasiBulanan }) {
+const BULAN_OPTIONS = Array.from({ length: 12 }, (_, i) => ({
+  value: String(i + 1),
+  label: getNamaBulan(i + 1),
+}))
+
+export function InformasiForm({ informasi }: InformasiFormProps) {
   const router = useRouter()
   const isEdit = !!informasi
   const [loading, setLoading] = useState(false)
 
+  const now = new Date()
   const [judul, setJudul] = useState(informasi?.judul || '')
+  const [bulan, setBulan] = useState<string>(String(informasi?.bulan || now.getMonth() + 1))
+  const [tahun, setTahun] = useState<string>(String(informasi?.tahun || now.getFullYear()))
   const [isi, setIsi] = useState(informasi?.isi || '')
-  const [bulan, setBulan] = useState<number>(informasi?.bulan || BULAN_NOW)
-  const [tahun, setTahun] = useState<number>(informasi?.tahun || TAHUN_NOW)
-  const [status, setStatus] = useState<'draft' | 'published'>(informasi?.status || 'published')
+  const [status, setStatus] = useState<ContentStatus>(informasi?.status || 'draft')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -37,11 +42,11 @@ export function InformasiForm({ informasi }: { informasi?: InformasiBulanan }) {
     const supabase = createClient()
     const payload = {
       judul: judul.trim(),
+      bulan: Number(bulan),
+      tahun: Number(tahun),
       isi: isi.trim(),
-      bulan,
-      tahun,
       status,
-      published_at: status === 'published' ? new Date().toISOString() : null,
+      published_at: status === 'published' && !informasi?.published_at ? new Date().toISOString() : informasi?.published_at,
     }
 
     if (isEdit) {
@@ -51,7 +56,7 @@ export function InformasiForm({ informasi }: { informasi?: InformasiBulanan }) {
         setLoading(false)
         return
       }
-      toast.success('Pengumuman diperbarui')
+      toast.success('Informasi diperbarui')
     } else {
       const { error } = await supabase.from('informasi_bulanan').insert(payload)
       if (error) {
@@ -59,7 +64,7 @@ export function InformasiForm({ informasi }: { informasi?: InformasiBulanan }) {
         setLoading(false)
         return
       }
-      toast.success('Pengumuman ditambahkan')
+      toast.success('Informasi ditambahkan')
     }
 
     router.push('/admin/informasi')
@@ -68,75 +73,79 @@ export function InformasiForm({ informasi }: { informasi?: InformasiBulanan }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Card className="border-0 bg-white">
+      <Card className="border-0 bg-stone-900">
         <CardContent className="p-6 md:p-8 space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="judul" className="font-semibold">
-              Judul Pengumuman <span className="text-red-500">*</span>
+            <Label htmlFor="judul" className="font-semibold text-stone-200">
+              Judul Pengumuman <span className="text-red-400">*</span>
             </Label>
             <Input
               id="judul"
               value={judul}
               onChange={(e) => setJudul(e.target.value)}
               required
-              placeholder="Contoh: Iuran Bulan April 2026"
-              className="h-11"
+              placeholder="Contoh: Pengumuman Iuran Bulan Februari"
+              className="h-11 bg-stone-950 border-stone-800 text-stone-100 placeholder:text-stone-500"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="font-semibold">Bulan</Label>
-              <Select value={String(bulan)} onValueChange={(v) => setBulan(Number(v))}>
-                <SelectTrigger className="h-11">
+              <Label className="font-semibold text-stone-200">
+                Bulan <span className="text-red-400">*</span>
+              </Label>
+              <Select value={bulan} onValueChange={setBulan}>
+                <SelectTrigger className="h-11 bg-stone-950 border-stone-800 text-stone-100">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {BULAN_OPTIONS.map((b) => (
-                    <SelectItem key={b} value={String(b)}>{getNamaBulan(b)}</SelectItem>
+                    <SelectItem key={b.value} value={b.value}>{b.label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label className="font-semibold">Tahun</Label>
-              <Select value={String(tahun)} onValueChange={(v) => setTahun(Number(v))}>
-                <SelectTrigger className="h-11">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {TAHUN_OPTIONS.map((t) => (
-                    <SelectItem key={t} value={String(t)}>{t}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label htmlFor="tahun" className="font-semibold text-stone-200">
+                Tahun <span className="text-red-400">*</span>
+              </Label>
+              <Input
+                id="tahun"
+                type="number"
+                min={2020}
+                max={2100}
+                value={tahun}
+                onChange={(e) => setTahun(e.target.value)}
+                required
+                className="h-11 bg-stone-950 border-stone-800 text-stone-100"
+              />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="isi" className="font-semibold">
-              Isi Pengumuman <span className="text-red-500">*</span>
+            <Label htmlFor="isi" className="font-semibold text-stone-200">
+              Isi Pengumuman <span className="text-red-400">*</span>
             </Label>
             <Textarea
               id="isi"
               value={isi}
               onChange={(e) => setIsi(e.target.value)}
               required
-              placeholder="Tulis isi pengumuman lengkap..."
               rows={10}
+              placeholder="Tulis isi pengumuman di sini..."
+              className="bg-stone-950 border-stone-800 text-stone-100 placeholder:text-stone-500"
             />
-            <p className="text-xs text-stone-500">Tip: Tekan Enter untuk pindah baris baru</p>
           </div>
 
           <div className="space-y-2">
-            <Label className="font-semibold">Status</Label>
-            <Select value={status} onValueChange={(v) => setStatus(v as 'draft' | 'published')}>
-              <SelectTrigger className="h-11">
+            <Label className="font-semibold text-stone-200">Status Publikasi</Label>
+            <Select value={status} onValueChange={(v) => setStatus(v as ContentStatus)}>
+              <SelectTrigger className="h-11 bg-stone-950 border-stone-800 text-stone-100">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="published">📢 Published (Tampil di website)</SelectItem>
                 <SelectItem value="draft">📝 Draft</SelectItem>
+                <SelectItem value="published">🚀 Published</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -147,14 +156,7 @@ export function InformasiForm({ informasi }: { informasi?: InformasiBulanan }) {
               disabled={loading}
               className="bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 text-white shadow-lg shadow-orange-500/30 rounded-full h-11 px-8"
             >
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Menyimpan...
-                </>
-              ) : (
-                isEdit ? 'Update Pengumuman' : 'Simpan Pengumuman'
-              )}
+              {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Menyimpan...</> : isEdit ? 'Update' : 'Simpan'}
             </Button>
             <Button type="button" variant="outline" disabled={loading} onClick={() => router.push('/admin/informasi')} className="rounded-full h-11">
               Batal

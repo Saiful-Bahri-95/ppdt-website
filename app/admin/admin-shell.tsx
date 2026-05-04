@@ -6,7 +6,6 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 import {
   LayoutDashboard,
   Calendar,
@@ -14,26 +13,19 @@ import {
   Megaphone,
   Trophy,
   Wallet,
+  Users,
   Settings,
   LogOut,
   Menu,
   X,
   ExternalLink,
-  Users,
-  LucideIcon,
 } from 'lucide-react'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 import type { Profile } from '@/lib/types/database'
 
-type SidebarLink = {
-  href: string
-  label: string
-  icon: LucideIcon
-  exact?: boolean
-}
-
-const sidebarLinks: SidebarLink[] = [
-  { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
+const menuItems = [
+  { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/kegiatan', label: 'Kegiatan', icon: Calendar },
   { href: '/admin/galeri', label: 'Galeri', icon: ImageIcon },
   { href: '/admin/informasi', label: 'Informasi', icon: Megaphone },
@@ -41,7 +33,7 @@ const sidebarLinks: SidebarLink[] = [
   { href: '/admin/keuangan', label: 'Keuangan', icon: Wallet },
 ]
 
-const superAdminLinks: SidebarLink[] = [
+const superAdminMenuItems = [
   { href: '/admin/users', label: 'Pengguna', icon: Users },
   { href: '/admin/pengaturan', label: 'Pengaturan', icon: Settings },
 ]
@@ -57,142 +49,176 @@ export function AdminShell({
   const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  const isSuperAdmin = profile.role === 'super_admin'
-  const allLinks = isSuperAdmin ? [...sidebarLinks, ...superAdminLinks] : sidebarLinks
-
   async function handleLogout() {
     const supabase = createClient()
     await supabase.auth.signOut()
-    toast.success('Berhasil logout!')
+    toast.success('Berhasil logout')
     router.push('/admin/login')
     router.refresh()
   }
 
-  return (
-    <div className="min-h-screen bg-stone-50 flex">
-      {/* Mobile Sidebar Overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+  const allMenu = [
+    ...menuItems,
+    ...(profile.role === 'super_admin' ? superAdminMenuItems : []),
+  ]
 
-      {/* Sidebar */}
-      <aside
-        className={cn(
-          'fixed lg:sticky top-0 left-0 z-50 h-screen w-64 bg-white border-r border-stone-200 flex flex-col transition-transform duration-300',
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-        )}
-      >
-        {/* Logo */}
-        <div className="h-16 px-6 flex items-center justify-between border-b border-stone-200">
-          <Link href="/admin" className="flex items-center gap-2.5">
-            <div className="relative w-8 h-8 flex-shrink-0">
-              <Image src="/logo-ppdt.png" alt="PPDT" fill sizes="32px" className="object-contain" />
+  return (
+    <div className="flex min-h-screen bg-stone-950">
+      {/* Sidebar Desktop */}
+      <aside className="hidden lg:flex flex-col w-64 fixed left-0 top-0 bottom-0 bg-stone-900 border-r border-stone-800 z-30">
+        <div className="p-5 border-b border-stone-800">
+          <Link href="/admin" className="flex items-center gap-3 group">
+            <div className="relative w-10 h-10 flex-shrink-0 transition-transform group-hover:scale-110 duration-300">
+              <Image src="/logo-ppdt.png" alt="Logo PPDT" fill sizes="40px" className="object-contain" />
             </div>
-            <div>
-              <p className="font-display font-extrabold text-sm leading-none text-gradient-sunset">PPDT</p>
-              <p className="text-[10px] text-stone-500 mt-0.5">Admin Panel</p>
+            <div className="flex flex-col leading-tight">
+              <span className="font-display font-extrabold text-lg text-gradient-sunset">PPDT</span>
+              <span className="text-xs text-stone-500 font-medium">Admin Panel</span>
             </div>
           </Link>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden h-8 w-8"
-            onClick={() => setSidebarOpen(false)}
-          >
-            <X className="h-4 w-4" />
-          </Button>
         </div>
 
-        {/* User info */}
-        <div className="p-4 border-b border-stone-200">
-          <div className="flex items-center gap-3 p-3 bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-              {profile.nama_lengkap.charAt(0).toUpperCase()}
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="font-semibold text-sm text-stone-900 truncate">{profile.nama_lengkap}</p>
-              <p className="text-xs text-orange-600 capitalize font-medium">{profile.role.replace('_', ' ')}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-          {allLinks.map((link) => {
-            const Icon = link.icon
-            const isActive = link.exact
-              ? pathname === link.href
-              : pathname.startsWith(link.href)
-
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+          {allMenu.map((item) => {
+            const Icon = item.icon
+            const isActive = pathname === item.href ||
+              (item.href !== '/admin' && pathname.startsWith(item.href))
             return (
               <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setSidebarOpen(false)}
+                key={item.href}
+                href={item.href}
                 className={cn(
-                  'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all',
+                  'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all',
                   isActive
-                    ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white shadow-lg shadow-orange-500/30'
-                    : 'text-stone-700 hover:bg-orange-50 hover:text-orange-600'
+                    ? 'bg-gradient-to-r from-red-600 to-orange-500 text-white shadow-lg shadow-orange-500/30'
+                    : 'text-stone-400 hover:text-orange-400 hover:bg-stone-800'
                 )}
               >
                 <Icon className="h-4 w-4 flex-shrink-0" />
-                {link.label}
+                <span>{item.label}</span>
               </Link>
             )
           })}
         </nav>
 
-        {/* Bottom actions */}
-        <div className="p-3 border-t border-stone-200 space-y-1">
+        <div className="p-4 border-t border-stone-800 space-y-2">
           <Link
             href="/"
             target="_blank"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-stone-700 hover:bg-orange-50 hover:text-orange-600 transition"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-stone-400 hover:text-orange-400 hover:bg-stone-800 transition"
           >
-            <ExternalLink className="h-4 w-4" />
+            <ExternalLink className="h-3.5 w-3.5" />
             Lihat Website
           </Link>
-          <button
+
+          <div className="px-3 py-2 rounded-xl bg-stone-800">
+            <p className="text-xs font-semibold text-stone-100 truncate">{profile.nama_lengkap}</p>
+            <p className="text-xs text-stone-500 capitalize">{profile.role.replace('_', ' ')}</p>
+          </div>
+
+          <Button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-red-600 hover:bg-red-50 transition"
+            variant="ghost"
+            className="w-full justify-start text-stone-400 hover:text-red-400 hover:bg-red-950/50 h-9"
           >
-            <LogOut className="h-4 w-4" />
+            <LogOut className="h-4 w-4 mr-2" />
             Logout
-          </button>
+          </Button>
+        </div>
+      </aside>
+
+      {/* Mobile Sidebar Overlay */}
+      {sidebarOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black/60 z-40 backdrop-blur-sm"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Mobile Sidebar */}
+      <aside
+        className={cn(
+          'lg:hidden fixed top-0 left-0 bottom-0 w-72 bg-stone-900 z-50 transform transition-transform duration-300 flex flex-col',
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        )}
+      >
+        <div className="p-5 border-b border-stone-800 flex items-center justify-between">
+          <Link href="/admin" onClick={() => setSidebarOpen(false)} className="flex items-center gap-3">
+            <div className="relative w-10 h-10 flex-shrink-0">
+              <Image src="/logo-ppdt.png" alt="Logo PPDT" fill sizes="40px" className="object-contain" />
+            </div>
+            <div className="flex flex-col leading-tight">
+              <span className="font-display font-extrabold text-lg text-gradient-sunset">PPDT</span>
+              <span className="text-xs text-stone-500 font-medium">Admin Panel</span>
+            </div>
+          </Link>
+          <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(false)} className="text-stone-400 hover:bg-stone-800">
+            <X className="h-5 w-5" />
+          </Button>
+        </div>
+
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+          {allMenu.map((item) => {
+            const Icon = item.icon
+            const isActive = pathname === item.href ||
+              (item.href !== '/admin' && pathname.startsWith(item.href))
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setSidebarOpen(false)}
+                className={cn(
+                  'flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all',
+                  isActive
+                    ? 'bg-gradient-to-r from-red-600 to-orange-500 text-white shadow-lg'
+                    : 'text-stone-400 hover:text-orange-400 hover:bg-stone-800'
+                )}
+              >
+                <Icon className="h-4 w-4 flex-shrink-0" />
+                <span>{item.label}</span>
+              </Link>
+            )
+          })}
+        </nav>
+
+        <div className="p-4 border-t border-stone-800 space-y-2">
+          <div className="px-3 py-2 rounded-xl bg-stone-800">
+            <p className="text-xs font-semibold text-stone-100 truncate">{profile.nama_lengkap}</p>
+            <p className="text-xs text-stone-500 capitalize">{profile.role.replace('_', ' ')}</p>
+          </div>
+          <Button
+            onClick={handleLogout}
+            variant="ghost"
+            className="w-full justify-start text-stone-400 hover:text-red-400 hover:bg-red-950/50 h-9"
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Logout
+          </Button>
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Top Bar */}
-        <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-stone-200 h-16 flex items-center justify-between px-4 lg:px-6">
+      <div className="flex-1 lg:ml-64 min-w-0">
+        {/* Topbar Mobile */}
+        <header className="lg:hidden sticky top-0 z-20 bg-stone-900/95 backdrop-blur-md border-b border-stone-800 px-4 py-3 flex items-center justify-between">
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
             onClick={() => setSidebarOpen(true)}
+            className="text-stone-300 hover:bg-stone-800"
           >
             <Menu className="h-5 w-5" />
           </Button>
-
-          <div className="flex-1 lg:flex-initial" />
-
-          <div className="text-xs text-stone-500 hidden sm:block">
-            {new Date().toLocaleDateString('id-ID', {
-              weekday: 'long',
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-            })}
-          </div>
+          <Link href="/admin" className="flex items-center gap-2">
+            <Image src="/logo-ppdt.png" alt="Logo" width={28} height={28} className="object-contain" />
+            <span className="font-display font-bold text-gradient-sunset">PPDT Admin</span>
+          </Link>
+          <div className="w-9" /> {/* Spacer for balance */}
         </header>
 
-        {/* Page Content */}
-        <main className="flex-1 p-4 lg:p-8">{children}</main>
+        <main className="p-4 md:p-8">
+          {children}
+        </main>
       </div>
     </div>
   )

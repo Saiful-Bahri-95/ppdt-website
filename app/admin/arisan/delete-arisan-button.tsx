@@ -43,15 +43,15 @@ export function DeleteArisanButton({ id, nama, dark }: { id: string; nama: strin
         <Button
           variant="ghost"
           size="icon"
-          className={`h-8 w-8 ${dark ? 'text-white hover:bg-white/20' : 'text-stone-400 hover:text-red-600 hover:bg-red-50'}`}
+          className={`h-8 w-8 ${dark ? 'text-white hover:bg-white/20' : 'text-stone-500 hover:text-red-400 hover:bg-red-950/50'}`}
         >
           <Trash2 className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <div className="w-12 h-12 mx-auto rounded-full bg-red-100 flex items-center justify-center mb-2">
-            <AlertTriangle className="h-6 w-6 text-red-600" />
+          <div className="w-12 h-12 mx-auto rounded-full bg-red-950/50 flex items-center justify-center mb-2">
+            <AlertTriangle className="h-6 w-6 text-red-400" />
           </div>
           <DialogTitle className="text-center">Hapus pemenang &ldquo;{nama}&rdquo;?</DialogTitle>
           <DialogDescription className="text-center">

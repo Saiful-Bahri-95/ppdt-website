@@ -55,58 +55,65 @@ export function PengaturanForm({ pengaturan }: { pengaturan: PengaturanOrganisas
 
   return (
     <form onSubmit={handleSubmit}>
-      <Card className="border-0 bg-white">
+      <Card className="border-0 bg-stone-900">
         <CardContent className="p-6 md:p-8 space-y-5">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2 space-y-2">
-              <Label htmlFor="nama-org" className="font-semibold">
-                Nama Organisasi <span className="text-red-500">*</span>
+              <Label htmlFor="nama-org" className="font-semibold text-stone-200">
+                Nama Organisasi <span className="text-red-400">*</span>
               </Label>
-              <Input id="nama-org" value={namaOrg} onChange={(e) => setNamaOrg(e.target.value)} required className="h-11" />
+              <Input id="nama-org" value={namaOrg} onChange={(e) => setNamaOrg(e.target.value)} required className="h-11 bg-stone-950 border-stone-800 text-stone-100" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="singkatan" className="font-semibold">
-                Singkatan <span className="text-red-500">*</span>
+              <Label htmlFor="singkatan" className="font-semibold text-stone-200">
+                Singkatan <span className="text-red-400">*</span>
               </Label>
-              <Input id="singkatan" value={singkatan} onChange={(e) => setSingkatan(e.target.value)} required className="h-11" />
+              <Input id="singkatan" value={singkatan} onChange={(e) => setSingkatan(e.target.value)} required className="h-11 bg-stone-950 border-stone-800 text-stone-100" />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="deskripsi" className="font-semibold">Deskripsi Organisasi</Label>
-            <Textarea id="deskripsi" value={deskripsi} onChange={(e) => setDeskripsi(e.target.value)} rows={4} placeholder="Tentang organisasi..." />
+            <Label htmlFor="deskripsi" className="font-semibold text-stone-200">Deskripsi Organisasi</Label>
+            <Textarea
+              id="deskripsi"
+              value={deskripsi}
+              onChange={(e) => setDeskripsi(e.target.value)}
+              rows={4}
+              placeholder="Tentang organisasi..."
+              className="bg-stone-950 border-stone-800 text-stone-100 placeholder:text-stone-500"
+            />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="alamat" className="font-semibold">Alamat</Label>
-            <Input id="alamat" value={alamat} onChange={(e) => setAlamat(e.target.value)} className="h-11" />
+            <Label htmlFor="alamat" className="font-semibold text-stone-200">Alamat</Label>
+            <Input id="alamat" value={alamat} onChange={(e) => setAlamat(e.target.value)} className="h-11 bg-stone-950 border-stone-800 text-stone-100" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="font-semibold">Email</Label>
-              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="h-11" />
+              <Label htmlFor="email" className="font-semibold text-stone-200">Email</Label>
+              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="h-11 bg-stone-950 border-stone-800 text-stone-100" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="telepon" className="font-semibold">Telepon</Label>
-              <Input id="telepon" value={telepon} onChange={(e) => setTelepon(e.target.value)} placeholder="+62 812..." className="h-11" />
+              <Label htmlFor="telepon" className="font-semibold text-stone-200">Telepon</Label>
+              <Input id="telepon" value={telepon} onChange={(e) => setTelepon(e.target.value)} placeholder="+62 812..." className="h-11 bg-stone-950 border-stone-800 text-stone-100 placeholder:text-stone-500" />
             </div>
           </div>
 
-          <div className="pt-4 border-t border-stone-100">
-            <h3 className="font-display font-semibold mb-4">Media Sosial</h3>
+          <div className="pt-4 border-t border-stone-800">
+            <h3 className="font-display font-semibold mb-4 text-stone-100">Media Sosial</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="instagram" className="font-semibold text-sm">Instagram</Label>
-                <Input id="instagram" value={instagram} onChange={(e) => setInstagram(e.target.value)} placeholder="@ppdt" className="h-11" />
+                <Label htmlFor="instagram" className="font-semibold text-sm text-stone-200">Instagram</Label>
+                <Input id="instagram" value={instagram} onChange={(e) => setInstagram(e.target.value)} placeholder="@ppdt" className="h-11 bg-stone-950 border-stone-800 text-stone-100 placeholder:text-stone-500" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="facebook" className="font-semibold text-sm">Facebook</Label>
-                <Input id="facebook" value={facebook} onChange={(e) => setFacebook(e.target.value)} placeholder="PPDT Page" className="h-11" />
+                <Label htmlFor="facebook" className="font-semibold text-sm text-stone-200">Facebook</Label>
+                <Input id="facebook" value={facebook} onChange={(e) => setFacebook(e.target.value)} placeholder="PPDT Page" className="h-11 bg-stone-950 border-stone-800 text-stone-100 placeholder:text-stone-500" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="whatsapp" className="font-semibold text-sm">WhatsApp</Label>
-                <Input id="whatsapp" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} placeholder="+62812..." className="h-11" />
+                <Label htmlFor="whatsapp" className="font-semibold text-sm text-stone-200">WhatsApp</Label>
+                <Input id="whatsapp" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} placeholder="+62812..." className="h-11 bg-stone-950 border-stone-800 text-stone-100 placeholder:text-stone-500" />
               </div>
             </div>
           </div>

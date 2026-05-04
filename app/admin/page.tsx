@@ -53,10 +53,10 @@ export default async function AdminDashboardPage() {
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-display font-extrabold text-stone-900">
+        <h1 className="text-2xl md:text-3xl font-display font-extrabold text-stone-50">
           Halo, <span className="text-gradient-sunset">{profile.nama_lengkap.split(' ')[0]}</span>! 👋
         </h1>
-        <p className="text-stone-600 mt-1 text-sm md:text-base">
+        <p className="text-stone-400 mt-1 text-sm md:text-base">
           Selamat datang di panel admin PPDT. Kelola konten website dengan mudah dari sini.
         </p>
       </div>
@@ -89,13 +89,13 @@ export default async function AdminDashboardPage() {
           const Icon = stat.icon
           return (
             <Link key={stat.label} href={stat.href}>
-              <Card className="group hover:shadow-xl hover:shadow-orange-500/20 transition-all hover:-translate-y-1 border-0 bg-white cursor-pointer">
+              <Card className="group hover:shadow-xl hover:shadow-orange-500/20 transition-all hover:-translate-y-1 border-0 bg-stone-900 cursor-pointer">
                 <CardContent className="p-5">
                   <div className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center mb-3 shadow-lg shadow-orange-500/30 group-hover:scale-110 transition`}>
                     <Icon className="h-5 w-5 text-white" />
                   </div>
-                  <p className="text-3xl font-display font-extrabold text-stone-900 leading-none mb-1">{stat.value}</p>
-                  <p className="text-xs text-stone-500 font-medium">{stat.label}</p>
+                  <p className="text-3xl font-display font-extrabold text-stone-50 leading-none mb-1">{stat.value}</p>
+                  <p className="text-xs text-stone-400 font-medium">{stat.label}</p>
                 </CardContent>
               </Card>
             </Link>
@@ -107,9 +107,9 @@ export default async function AdminDashboardPage() {
       {hasData && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg md:text-xl font-display font-bold text-stone-900">📊 Analisa Keuangan</h2>
+            <h2 className="text-lg md:text-xl font-display font-bold text-stone-50">📊 Analisa Keuangan</h2>
             <Link href="/admin/keuangan">
-              <Badge className="bg-orange-100 text-orange-700 hover:bg-orange-200 border-0 cursor-pointer">
+              <Badge className="bg-orange-950/50 text-orange-400 hover:bg-orange-950 border-0 cursor-pointer">
                 Detail <ArrowRight className="h-3 w-3 ml-1" />
               </Badge>
             </Link>
@@ -126,21 +126,21 @@ export default async function AdminDashboardPage() {
 
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg md:text-xl font-display font-bold text-stone-900">⚡ Aksi Cepat</h2>
-          <Badge className="bg-orange-100 text-orange-700 hover:bg-orange-100 border-0">Tambah konten baru</Badge>
+          <h2 className="text-lg md:text-xl font-display font-bold text-stone-50">⚡ Aksi Cepat</h2>
+          <Badge className="bg-orange-950/50 text-orange-400 hover:bg-orange-950 border-0">Tambah konten baru</Badge>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {quickActions.map((action) => {
             const Icon = action.icon
             return (
               <Link key={action.label} href={action.href}>
-                <Card className="group hover:shadow-lg hover:shadow-orange-500/10 transition-all hover:-translate-y-0.5 border-0 bg-white cursor-pointer">
+                <Card className="group hover:shadow-lg hover:shadow-orange-500/10 transition-all hover:-translate-y-0.5 border-0 bg-stone-900 cursor-pointer">
                   <CardContent className="p-4 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center flex-shrink-0 group-hover:bg-gradient-to-br group-hover:from-red-500 group-hover:to-orange-500 transition">
-                      <Icon className="h-4 w-4 text-orange-600 group-hover:text-white transition" />
+                    <div className="w-10 h-10 rounded-xl bg-orange-950/50 flex items-center justify-center flex-shrink-0 group-hover:bg-gradient-to-br group-hover:from-red-500 group-hover:to-orange-500 transition">
+                      <Icon className="h-4 w-4 text-orange-400 group-hover:text-white transition" />
                     </div>
-                    <span className="text-sm font-semibold text-stone-900 flex-1">{action.label}</span>
-                    <ArrowRight className="h-4 w-4 text-stone-400 group-hover:text-orange-600 group-hover:translate-x-1 transition" />
+                    <span className="text-sm font-semibold text-stone-100 flex-1">{action.label}</span>
+                    <ArrowRight className="h-4 w-4 text-stone-500 group-hover:text-orange-400 group-hover:translate-x-1 transition" />
                   </CardContent>
                 </Card>
               </Link>
@@ -149,11 +149,11 @@ export default async function AdminDashboardPage() {
         </div>
       </div>
 
-      <Card className="border-0 bg-gradient-to-br from-orange-50 to-amber-50 overflow-hidden">
+      <Card className="border-0 bg-gradient-to-br from-orange-950/30 to-amber-950/30 overflow-hidden">
         <CardContent className="p-6 relative">
           <div className="text-3xl mb-2">💡</div>
-          <h3 className="font-display font-bold text-base text-stone-900 mb-2">Tips Menggunakan Panel Admin</h3>
-          <ul className="text-sm text-stone-700 space-y-1.5 list-disc list-inside">
+          <h3 className="font-display font-bold text-base text-stone-100 mb-2">Tips Menggunakan Panel Admin</h3>
+          <ul className="text-sm text-stone-300 space-y-1.5 list-disc list-inside">
             <li>Pastikan foto yang diupload tidak terlalu besar (maksimal 5MB)</li>
             <li>Update informasi bulanan setiap awal bulan untuk konsistensi</li>
             <li>Backup data laporan keuangan secara berkala</li>

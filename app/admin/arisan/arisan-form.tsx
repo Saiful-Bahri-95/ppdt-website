@@ -68,12 +68,12 @@ export function ArisanForm({ peserta, nextNomor, lastPeriode }: ArisanFormProps)
 
   return (
     <form onSubmit={handleSubmit}>
-      <Card className="border-0 bg-white">
+      <Card className="border-0 bg-stone-900">
         <CardContent className="p-6 md:p-8 space-y-5">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="nomor" className="font-semibold">
-                Nomor Urut <span className="text-red-500">*</span>
+              <Label htmlFor="nomor" className="font-semibold text-stone-200">
+                Nomor Urut <span className="text-red-400">*</span>
               </Label>
               <Input
                 id="nomor"
@@ -82,12 +82,12 @@ export function ArisanForm({ peserta, nextNomor, lastPeriode }: ArisanFormProps)
                 value={nomorUrut}
                 onChange={(e) => setNomorUrut(Number(e.target.value))}
                 required
-                className="h-11"
+                className="h-11 bg-stone-950 border-stone-800 text-stone-100"
               />
             </div>
             <div className="md:col-span-2 space-y-2">
-              <Label htmlFor="nama" className="font-semibold">
-                Nama Pemenang <span className="text-red-500">*</span>
+              <Label htmlFor="nama" className="font-semibold text-stone-200">
+                Nama Pemenang <span className="text-red-400">*</span>
               </Label>
               <Input
                 id="nama"
@@ -95,21 +95,21 @@ export function ArisanForm({ peserta, nextNomor, lastPeriode }: ArisanFormProps)
                 onChange={(e) => setNama(e.target.value)}
                 required
                 placeholder="Contoh: Budi Santoso"
-                className="h-11"
+                className="h-11 bg-stone-950 border-stone-800 text-stone-100 placeholder:text-stone-500"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="tanggal" className="font-semibold">
-                Tanggal Keluar <span className="text-red-500">*</span>
+              <Label htmlFor="tanggal" className="font-semibold text-stone-200">
+                Tanggal Keluar <span className="text-red-400">*</span>
               </Label>
-              <Input id="tanggal" type="date" value={tanggal} onChange={(e) => setTanggal(e.target.value)} required className="h-11" />
+              <Input id="tanggal" type="date" value={tanggal} onChange={(e) => setTanggal(e.target.value)} required className="h-11 bg-stone-950 border-stone-800 text-stone-100" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="periode" className="font-semibold">
-                Periode Arisan <span className="text-red-500">*</span>
+              <Label htmlFor="periode" className="font-semibold text-stone-200">
+                Periode Arisan <span className="text-red-400">*</span>
               </Label>
               <Input
                 id="periode"
@@ -117,14 +117,14 @@ export function ArisanForm({ peserta, nextNomor, lastPeriode }: ArisanFormProps)
                 onChange={(e) => setPeriode(e.target.value)}
                 required
                 placeholder="Periode 2025-2027"
-                className="h-11"
+                className="h-11 bg-stone-950 border-stone-800 text-stone-100 placeholder:text-stone-500"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="nominal" className="font-semibold">
-              Nominal Diterima (Rp) <span className="text-stone-400 text-xs font-normal">(opsional)</span>
+            <Label htmlFor="nominal" className="font-semibold text-stone-200">
+              Nominal Diterima (Rp) <span className="text-stone-500 text-xs font-normal">(opsional)</span>
             </Label>
             <Input
               id="nominal"
@@ -133,19 +133,20 @@ export function ArisanForm({ peserta, nextNomor, lastPeriode }: ArisanFormProps)
               value={nominal}
               onChange={(e) => setNominal(e.target.value)}
               placeholder="5000000"
-              className="h-11"
+              className="h-11 bg-stone-950 border-stone-800 text-stone-100 placeholder:text-stone-500"
             />
             <p className="text-xs text-stone-500">Tulis tanpa titik atau koma. Contoh: 5000000 untuk 5 juta.</p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="keterangan" className="font-semibold">Keterangan</Label>
+            <Label htmlFor="keterangan" className="font-semibold text-stone-200">Keterangan</Label>
             <Textarea
               id="keterangan"
               value={keterangan}
               onChange={(e) => setKeterangan(e.target.value)}
               placeholder="Catatan tambahan..."
               rows={3}
+              className="bg-stone-950 border-stone-800 text-stone-100 placeholder:text-stone-500"
             />
           </div>
 

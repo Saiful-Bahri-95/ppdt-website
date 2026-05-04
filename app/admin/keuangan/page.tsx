@@ -47,22 +47,22 @@ export default async function AdminKeuanganPage() {
               <p className="text-2xl font-display font-extrabold">{formatRupiah(saldo)}</p>
             </CardContent>
           </Card>
-          <Card className="border-0 bg-white shadow-lg shadow-green-500/10">
+          <Card className="border-0 bg-stone-900 shadow-lg shadow-green-500/10">
             <CardContent className="p-5">
               <div className="flex items-center gap-2 mb-1">
-                <TrendingUp className="h-4 w-4 text-green-600" />
-                <span className="text-xs font-semibold uppercase text-stone-500">Pemasukan</span>
+                <TrendingUp className="h-4 w-4 text-green-400" />
+                <span className="text-xs font-semibold uppercase text-stone-400">Pemasukan</span>
               </div>
-              <p className="text-2xl font-display font-extrabold text-green-600">{formatRupiah(totalPemasukan)}</p>
+              <p className="text-2xl font-display font-extrabold text-green-400">{formatRupiah(totalPemasukan)}</p>
             </CardContent>
           </Card>
-          <Card className="border-0 bg-white shadow-lg shadow-red-500/10">
+          <Card className="border-0 bg-stone-900 shadow-lg shadow-red-500/10">
             <CardContent className="p-5">
               <div className="flex items-center gap-2 mb-1">
-                <TrendingDown className="h-4 w-4 text-red-600" />
-                <span className="text-xs font-semibold uppercase text-stone-500">Pengeluaran</span>
+                <TrendingDown className="h-4 w-4 text-red-400" />
+                <span className="text-xs font-semibold uppercase text-stone-400">Pengeluaran</span>
               </div>
-              <p className="text-2xl font-display font-extrabold text-red-600">{formatRupiah(totalPengeluaran)}</p>
+              <p className="text-2xl font-display font-extrabold text-red-400">{formatRupiah(totalPengeluaran)}</p>
             </CardContent>
           </Card>
         </div>
@@ -78,20 +78,22 @@ export default async function AdminKeuanganPage() {
       ) : (
         <div className="space-y-2">
           {list.map((t) => (
-            <Card key={t.id} className="border-0 bg-white hover:shadow-md transition">
+            <Card key={t.id} className="border-0 bg-stone-900 hover:shadow-md transition">
               <CardContent className="p-4 md:p-5">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                    t.jenis === 'pemasukan' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
+                    t.jenis === 'pemasukan'
+                      ? 'bg-green-950/50 text-green-400'
+                      : 'bg-red-950/50 text-red-400'
                   }`}>
                     {t.jenis === 'pemasukan' ? <ArrowUpCircle className="h-5 w-5" /> : <ArrowDownCircle className="h-5 w-5" />}
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm text-stone-900 truncate">
+                    <p className="font-semibold text-sm text-stone-100 truncate">
                       {t.keterangan || t.kategori}
                     </p>
-                    <div className="flex items-center gap-2 text-xs text-stone-500 mt-0.5">
+                    <div className="flex items-center gap-2 text-xs text-stone-400 mt-0.5">
                       <span>{formatTanggal(t.tanggal)}</span>
                       <span>•</span>
                       <span>{t.kategori}</span>
@@ -99,14 +101,14 @@ export default async function AdminKeuanganPage() {
                   </div>
 
                   <p className={`font-display font-bold text-sm md:text-base whitespace-nowrap ${
-                    t.jenis === 'pemasukan' ? 'text-green-600' : 'text-red-600'
+                    t.jenis === 'pemasukan' ? 'text-green-400' : 'text-red-400'
                   }`}>
                     {t.jenis === 'pemasukan' ? '+' : '-'}{formatRupiah(t.nominal)}
                   </p>
 
                   <div className="flex items-center gap-1 flex-shrink-0">
                     <Link href={`/admin/keuangan/${t.id}/edit`}>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-stone-500 hover:text-orange-600">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-stone-400 hover:text-orange-400 hover:bg-stone-800">
                         <Edit className="h-4 w-4" />
                       </Button>
                     </Link>

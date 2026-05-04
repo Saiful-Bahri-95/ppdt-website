@@ -28,23 +28,23 @@ export default async function UsersPage() {
         description="Kelola admin yang dapat mengakses panel"
       />
 
-      <Card className="border-0 bg-orange-50 mb-4">
-        <CardContent className="p-4 text-sm text-stone-700">
-          💡 <strong>Catatan:</strong> Untuk menambah admin baru, buat user baru di Supabase Dashboard → Authentication → Users → Add user. Setelah itu, edit role dan status di sini.
+      <Card className="border-0 bg-orange-950/30 mb-4">
+        <CardContent className="p-4 text-sm text-stone-300">
+          💡 <strong className="text-stone-100">Catatan:</strong> Untuk menambah admin baru, buat user baru di Supabase Dashboard → Authentication → Users → Add user. Setelah itu, edit role dan status di sini.
         </CardContent>
       </Card>
 
       {profiles.length === 0 ? (
-        <Card className="border-0 bg-white">
+        <Card className="border-0 bg-stone-900">
           <CardContent className="p-12 text-center">
-            <Users className="h-16 w-16 mx-auto text-stone-300 mb-4" />
-            <p className="text-stone-500">Belum ada pengguna admin.</p>
+            <Users className="h-16 w-16 mx-auto text-stone-600 mb-4" />
+            <p className="text-stone-400">Belum ada pengguna admin.</p>
           </CardContent>
         </Card>
       ) : (
         <div className="space-y-3">
           {profiles.map((p) => (
-            <Card key={p.id} className="border-0 bg-white">
+            <Card key={p.id} className="border-0 bg-stone-900">
               <CardContent className="p-5">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-white font-bold flex-shrink-0">
@@ -53,7 +53,7 @@ export default async function UsersPage() {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <h3 className="font-display font-bold text-base">{p.nama_lengkap}</h3>
+                      <h3 className="font-display font-bold text-base text-stone-50">{p.nama_lengkap}</h3>
                       <Badge className={
                         p.role === 'super_admin' ? 'bg-red-500 text-white' :
                         p.role === 'admin' ? 'bg-orange-500 text-white' :
@@ -62,10 +62,10 @@ export default async function UsersPage() {
                         {p.role.replace('_', ' ')}
                       </Badge>
                       {!p.is_active && (
-                        <Badge className="bg-stone-500 text-white">Nonaktif</Badge>
+                        <Badge className="bg-stone-700 text-stone-300">Nonaktif</Badge>
                       )}
                     </div>
-                    <div className="text-xs text-stone-500">
+                    <div className="text-xs text-stone-400">
                       {p.jabatan && <span>{p.jabatan} • </span>}
                       Bergabung {formatTanggal(p.created_at)}
                     </div>
