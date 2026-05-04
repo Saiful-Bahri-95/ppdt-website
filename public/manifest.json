@@ -1,0 +1,58 @@
+{
+  "name": "Persatuan Pemuda Dukuh Tengah",
+  "short_name": "PPDT",
+  "description": "Website resmi Persatuan Pemuda Dukuh Tengah - wadah pemersatu pemuda dalam membangun lingkungan yang guyub dan berdaya.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0c0a09",
+  "theme_color": "#0c0a09",
+  "lang": "id",
+  "dir": "ltr",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Kegiatan",
+      "short_name": "Kegiatan",
+      "description": "Lihat kegiatan terbaru PPDT",
+      "url": "/kegiatan",
+      "icons": [{ "src": "/android-chrome-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Keuangan",
+      "short_name": "Keuangan",
+      "description": "Laporan keuangan transparan",
+      "url": "/keuangan",
+      "icons": [{ "src": "/android-chrome-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Galeri",
+      "short_name": "Galeri",
+      "description": "Galeri foto kegiatan",
+      "url": "/galeri",
+      "icons": [{ "src": "/android-chrome-192x192.png", "sizes": "192x192" }]
+    }
+  ],
+  "categories": ["social", "lifestyle", "education"],
+  "prefer_related_applications": false
+}
