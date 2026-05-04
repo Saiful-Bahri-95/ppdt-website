@@ -21,7 +21,7 @@
 
 ## Live Demo
 
-**🚀 Live Demo:** [https://ppdt-website-nine.vercel.app/](https://ppdt-website.vercel.app/)
+**🚀 Live Demo:** [https://ppdt-website.vercel.app/](https://ppdt-website.vercel.app/)
 
 ## 📖 Tentang Proyek
 
