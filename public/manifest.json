@@ -32,6 +32,13 @@
   ],
   "shortcuts": [
     {
+      "name": "Login Admin",
+      "short_name": "Admin",
+      "description": "Login ke panel administrator PPDT",
+      "url": "/admin/login",
+      "icons": [{ "src": "/android-chrome-192x192.png", "sizes": "192x192" }]
+    },
+    {
       "name": "Kegiatan",
       "short_name": "Kegiatan",
       "description": "Lihat kegiatan terbaru PPDT",

@@ -100,6 +100,11 @@ export function Footer() {
 
           <div className="border-t border-white/20 mt-12 pt-6 text-center text-sm text-orange-100">
             <p>&copy; {tahunIni} <span className="font-semibold">Persatuan Pemuda Dukuh Tengah</span></p>
+            <p className="mt-2 text-xs text-orange-200/70">
+              <Link href="/admin/login" className="hover:text-white transition underline-offset-2 hover:underline">
+                Panel Administrator
+              </Link>
+            </p>
           </div>
         </div>
       </div>
