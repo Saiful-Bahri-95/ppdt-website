@@ -359,7 +359,7 @@ Project ini dibuat untuk internal organisasi PPDT. Untuk pengurus yang ingin ber
 ## 📞 Kontak & Dukungan
 
 - **Organisasi**: Persatuan Pemuda Dukuh Tengah (PPDT)
-- **Email**: ppdt.dukuhtengah@gmail.com
+- **Email**: ppdt.official@gmail.com
 - **Wilayah**: RT 12, 13, 14 Dukuh Tengah
 
 Untuk masalah teknis atau bug report, silakan buka [GitHub Issues](https://github.com/officialppdt/ppdt-website/issues).
@@ -376,7 +376,7 @@ Project ini dibuat untuk keperluan internal organisasi. Tidak diperkenankan untu
 
 ## 🙏 Credits
 
-Dibangun dengan ❤️ oleh pengurus PPDT untuk komunitas Dukuh Tengah.
+Dibangun dengan ❤️ oleh Saiful Bahri untuk komunitas Dukuh Tengah.
 
 **Tech & Tools:**
 - [Next.js](https://nextjs.org/) - The React Framework
