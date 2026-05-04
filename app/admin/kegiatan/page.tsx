@@ -66,7 +66,7 @@ export default async function AdminKegiatanPage() {
               </div>
 
               <CardContent className="p-4">
-                <h3 className="font-display font-bold text-base mb-2 line-clamp-2 leading-tight">{k.judul}</h3>
+                <h3 className="font-display font-bold text-base mb-2 line-clamp-2 leading-tight text-stone-800">{k.judul}</h3>
                 <div className="flex flex-col gap-1 text-xs text-stone-500 mb-4">
                   <span className="flex items-center gap-1">
                     <Calendar className="h-3 w-3 text-orange-500" />
