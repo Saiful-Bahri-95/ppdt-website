@@ -12,10 +12,10 @@ export default async function GaleriBaruPage() {
 
   const { data } = await supabase
     .from('kegiatan')
-    .select('id, judul, tanggal_kegiatan')
+    .select('*')
     .order('tanggal_kegiatan', { ascending: false })
 
-  const kegiatanList = (data || []) as Pick<Kegiatan, 'id' | 'judul' | 'tanggal_kegiatan'>[]
+  const kegiatanList = (data || []) as Kegiatan[]
 
   return (
     <div className="max-w-3xl mx-auto">
